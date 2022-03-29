@@ -2,7 +2,7 @@ from django.http.response import HttpResponse
 from django.http import Http404
 from django.shortcuts import render
 from datetime import datetime
-from .models import *
+from ..app.models import *
 from django.views.generic import CreateView
 #from .forms import *
 from django.contrib.auth.views import LoginView, LogoutView
