@@ -25,39 +25,6 @@
         <a class="navbar-brand order-1 mr-0" href="https://www.acg.edu" target="_blank">Presented by ITC4214</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
-    <!--</button>
-        <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-            <div class="navbar-nav">
-                <a class="nav-item nav-link" href="{% url 'index' %}" id="homelink">Home<span class="sr-only">(current)</span></a>
-                <a class="nav-item nav-link" href="{% url 'about' %}" id="aboutlink">About</a>
-                <div class="dropdown">
-                    <a class="nav-item nav-link" href="{% url 'speakers' %}" id="speakerlink">Speakers</a>
-                    <ul class="dropdown-menu" aria-labelledby="speakerlink">
-                        {% for speaker in v_speakers %}
-                            <li><a class="dropdown-item" href="/speaker/{{ speaker.id }}">{{speaker.name}} {{speaker.lastname }}</a></li>
-                        {% endfor %}
-                    </ul>
-                </div>
-                <a class="nav-item nav-link" href="{% url 'schedule' %}" id="schedulelink">Schedule</a>
-            </div>
-        </div>
-    </div>
-    <form class="text-center mr-2" method="POST" action="{% url 'search' %}">
-        {% csrf_token %}
-        <div class="input-group">
-            <input class="form-control" name="q" id="q" type="text" aria-describedby="srch">
-            <button type="submit" class="btn btn-light" id="srch">🔎︎</button>
-        </div>
-    </form>
-    {% if user.is_authenticated %}
-    <div class="text-white mx-2">
-        Welcome, {{ user.username }}
-    </div>
-    <a class='btn btn-outline-light' href="{% url 'logout' %}">Logout</a>
-    {% else %}
-    <a class='btn btn-outline-light' href="{% url 'signup' %}">Sign Up</a>
-    <a class='btn btn-outline-light' href="{% url 'login' %}">Login</a>
-    {% endif %}-->
 </nav>
 <!-- /navbar -->
 
