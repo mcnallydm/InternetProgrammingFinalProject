@@ -36,22 +36,25 @@ class Spell(models.Model):
     level = models.IntegerField()
     school = models.ForeignKey(School, on_delete=models.CASCADE)
     materials = models.CharField(max_length=100, default="None")
-    range = models.IntegerField()
-    area = models.IntegerField()
+    range = models.CharField(max_length=20, default="Touch")
+    area = models.CharField(max_length=30, default="Target")
     AREA_TYPES = [("N", "None"), ("R", "Radius"), ("C", "Cube"), ("S", "Sphere"), ("Y", "Cylinder")]
     area_shape = models.CharField(max_length=20, choices=AREA_TYPES, default="None")
     ATTACK_TYPES = [
         ("M", "Melee Spell Attack"), 
-        ("R", "Ranged Spell Attack"), 
+        ("R", "Ranged Spell Attack")
+    ]
+    SAVE_TYPES = [
+        ("N", "None"),
         ("D", "Dexterity Save"), 
         ("S", "Strength Save"),
         ("C", "Constitution Save"),
         ("I", "Intelligence Save"),
         ("W", "Wisdom Save"),
-        ("H", "Charisma Save"),
-        ("N", "None")
+        ("H", "Charisma Save")
     ]
-    att_save = models.CharField(max_length=30, choices=ATTACK_TYPES, default="None")
+    attack = models.CharField(max_length=30, choices=ATTACK_TYPES, default="None")
+    saving_throw = models.CharField(max_length=30, choices=SAVE_TYPES, default="None")
     casting_time = models.CharField(max_length=20, default="None")
     duration = models.CharField(max_length=20, default="None")
     concentration = models.BooleanField()
@@ -63,11 +66,7 @@ class Spell(models.Model):
     char_class = models.ManyToManyField(CharacterClass, blank=True)
     RATING_OPTIONS = [(0, "No Rating"), (1, "1/5"), (2, "2/5"), (3, "3/5"), (4, "4/5"), (5, "5/5")]
     rating = models.IntegerField(choices=RATING_OPTIONS, null = True, blank=True)
+    favorite = models.BooleanField(default=False)
 
     def __str__(self):
         return f"{self.id}: {self.name}"
-
-
-
-'''class School(models.Model):
-    school = models.CharField(max_length=30, default="None")'''
