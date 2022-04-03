@@ -5,9 +5,9 @@ from django.forms import IntegerField
 
 # Create your models here.
 class School(models.Model):
-    school = models.CharField(max_length=30, blank=True)
+    name = models.CharField(max_length=30, blank=True)
     def __str__(self):
-        return f"{self.id}: {self.school}"
+        return f"{self.id}: {self.name}"
 
 class Component(models.Model):
     COMPONENT_TYPES = [("V", "Verbal"), ("S", "Somatic"), ("M", "Material")]
@@ -38,9 +38,10 @@ class Spell(models.Model):
     materials = models.CharField(max_length=100, default="None")
     range = models.CharField(max_length=20, default="Touch")
     area = models.CharField(max_length=30, default="Target")
-    AREA_TYPES = [("N", "None"), ("R", "Radius"), ("C", "Cube"), ("S", "Sphere"), ("Y", "Cylinder")]
+    AREA_TYPES = [("N", "None"), ("R", "Radius"), ("C", "Cube"), ("S", "Sphere"), ("Y", "Cylinder"), ("O", "Cone")]
     area_shape = models.CharField(max_length=20, choices=AREA_TYPES, default="None")
     ATTACK_TYPES = [
+        ("N", "None"),
         ("M", "Melee Spell Attack"), 
         ("R", "Ranged Spell Attack")
     ]
@@ -56,13 +57,14 @@ class Spell(models.Model):
     attack = models.CharField(max_length=30, choices=ATTACK_TYPES, default="None")
     saving_throw = models.CharField(max_length=30, choices=SAVE_TYPES, default="None")
     casting_time = models.CharField(max_length=20, default="None")
+    ritual = models.BooleanField(default=False)
     duration = models.CharField(max_length=20, default="None")
     concentration = models.BooleanField()
     components = models.ManyToManyField(Component, blank=True)
     damage_type = models.ManyToManyField(DamageType, blank=True)
     effects = models.ManyToManyField(Effect, blank=True)
     description = models.TextField(max_length=4000, default="No description provided.")
-    upcasting = models.TextField(max_length=1000, default="You may not upcast this spell.")
+    upcasting = models.TextField(max_length=1000, default="No additional effects when upcast.")
     char_class = models.ManyToManyField(CharacterClass, blank=True)
     RATING_OPTIONS = [(0, "No Rating"), (1, "1/5"), (2, "2/5"), (3, "3/5"), (4, "4/5"), (5, "5/5")]
     rating = models.IntegerField(choices=RATING_OPTIONS, null = True, blank=True)
