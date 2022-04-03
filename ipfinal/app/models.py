@@ -38,21 +38,28 @@ class Spell(models.Model):
     materials = models.CharField(max_length=100, default="None")
     range = models.CharField(max_length=20, default="Touch")
     area = models.CharField(max_length=30, default="Target")
-    AREA_TYPES = [("N", "None"), ("R", "Radius"), ("C", "Cube"), ("S", "Sphere"), ("Y", "Cylinder"), ("O", "Cone")]
+    AREA_TYPES = [
+        ("None", "None"), 
+        ("Radius", "Radius"), 
+        ("Cube", "Cube"), 
+        ("Sphere", "Sphere"), 
+        ("Cylinder", "Cylinder"), 
+        ("Cone", "Cone")
+        ]
     area_shape = models.CharField(max_length=20, choices=AREA_TYPES, default="None")
     ATTACK_TYPES = [
-        ("N", "None"),
-        ("M", "Melee Spell Attack"), 
-        ("R", "Ranged Spell Attack")
+        ("None", "None"),
+        ("Melee", "Melee Spell Attack"), 
+        ("Ranged", "Ranged Spell Attack")
     ]
     SAVE_TYPES = [
-        ("N", "None"),
-        ("D", "Dexterity Save"), 
-        ("S", "Strength Save"),
-        ("C", "Constitution Save"),
-        ("I", "Intelligence Save"),
-        ("W", "Wisdom Save"),
-        ("H", "Charisma Save")
+        ("None", "None"),
+        ("Dexterity", "Dexterity Save"), 
+        ("Strength", "Strength Save"),
+        ("Constitution", "Constitution Save"),
+        ("Intelligence", "Intelligence Save"),
+        ("Wisdom", "Wisdom Save"),
+        ("Charisma", "Charisma Save")
     ]
     attack = models.CharField(max_length=30, choices=ATTACK_TYPES, default="None")
     saving_throw = models.CharField(max_length=30, choices=SAVE_TYPES, default="None")
@@ -66,7 +73,14 @@ class Spell(models.Model):
     description = models.TextField(max_length=4000, default="No description provided.")
     upcasting = models.TextField(max_length=1000, default="No additional effects when upcast.")
     char_class = models.ManyToManyField(CharacterClass, blank=True)
-    RATING_OPTIONS = [(0, "No Rating"), (1, "1/5"), (2, "2/5"), (3, "3/5"), (4, "4/5"), (5, "5/5")]
+    RATING_OPTIONS = [
+        ("No Rating", "No Rating"), 
+        ("1/5", "1/5"), 
+        ("2/5", "2/5"), 
+        ("3/5", "3/5"), 
+        ("4/5", "4/5"), 
+        ("5/5", "5/5")
+        ]
     rating = models.IntegerField(choices=RATING_OPTIONS, null = True, blank=True)
     favorite = models.BooleanField(default=False)
 
