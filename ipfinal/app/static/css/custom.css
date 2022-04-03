@@ -1,8 +1,3 @@
-.card-body a {
-    text-decoration: none;
-    color: black;
-}
-
 .backg-nav {
     background-color: #3d304f;
 }
@@ -14,4 +9,8 @@
 .jumbotron {
     background-image: url( '/static/img/jumbo_bg.jpg' );
   background-size: cover;
+}
+
+.card {
+    border-color: transparent;
 }

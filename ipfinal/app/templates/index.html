@@ -1,28 +1,35 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <!-- jumbotron -->
-    <div class="jumbotron jumbotron-fluid bg-info text-white">
-        <div class="container text-sm-center pt-5">
-            <h1 class="display-2 pb-5">Spells</h1>
-            </div>
-        </div>
-    </div>
-    <!-- /jumbotron -->
     {% for spell in v_spells %}
         <div class="col-md-4 col-lg-3">
             <div class="card mb-3"
                 {% if spell.school.id == 8 %}
-                    style="background-color: #c7ffcb; color: #385c3a;"
+                    style="background-color: #c7ffcb; border-color: transparent; background-image: url( '/static/img/necromancy.jpg' ); color: white;"
                 {% endif %}
             >
                 <!--img class="card-img-top" src="/static/img/{{speaker.avatar}}" alt="Vivianne"-->
                 <div class="card-body">
-                    <a href="{% url 'spell_detail' spell.id %}">
-                        <h4 class="card-title text-center">{{spell.name}}</h4>
+                    <a href="{% url 'spell_detail' spell.id %}" style="text-decoration: none;">
+                        <h4 class="card-title text-center"
+                        {% if spell.school.id == 8 %}
+                            style="color: white;"
+                        {% endif %}
+                        >{{spell.name}}</h4>
                     </a>
                     <hr>
-                    <p class="card-text"> {{spell.description}} </p>
+                    <div class="card-text">
+                        <div class="col-1">
+                            <strong>Level: </strong>
+                            {% if spell.level == 0 %}
+                                Cantrip
+                            {% else %}
+                                {{spell.level}}
+                            {% endif %}
+                        </div>
+
+                    </div>
+                    <div class="card-text col-3"><strong>Casting Time: </strong>{{spell.casting_time}}</div>
                 </div>
             </div>
         </div>
