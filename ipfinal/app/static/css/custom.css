@@ -1,0 +1,16 @@
+.backg-nav {
+    background-color: #3d304f;
+}
+
+.dark-bg {
+    background-color: #ece1fa;
+}
+
+.jumbotron {
+    background-image: url( '/static/img/jumbo_bg.jpg' );
+  background-size: cover;
+}
+
+.card {
+    border-color: transparent;
+}
