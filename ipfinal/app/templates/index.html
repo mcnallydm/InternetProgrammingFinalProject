@@ -1,5 +1,30 @@
 {% extends "base.html" %}
 
-{% block body %}
-    <p>hi</p>
+{% block content %}
+    <!-- jumbotron -->
+    <div class="jumbotron jumbotron-fluid bg-info text-white">
+        <div class="container text-sm-center pt-5">
+            <h1 class="display-2 pb-5">Spells</h1>
+            </div>
+        </div>
+    </div>
+    <!-- /jumbotron -->
+    {% for spell in v_spells %}
+        <div class="col-md-4 col-lg-3">
+            <div class="card mb-3"
+                {% if spell.school.id == 8 %}
+                    style="background-color: #c7ffcb; color: #385c3a;"
+                {% endif %}
+            >
+                <!--img class="card-img-top" src="/static/img/{{speaker.avatar}}" alt="Vivianne"-->
+                <div class="card-body">
+                    <a href="{% url 'spell_detail' spell.id %}">
+                        <h4 class="card-title text-center">{{spell.name}}</h4>
+                    </a>
+                    <hr>
+                    <p class="card-text"> {{spell.description}} </p>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
 {% endblock %}
