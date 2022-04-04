@@ -20,7 +20,7 @@ def index(request):
 
 def spell_detail(request, spell_name):
     try:
-        spell_to_view = Spell.objects.get(id=spell_name)
+        spell_to_view = Spell.objects.get(name=spell_name)
     except Spell.DoesNotExist:
         raise Http404('Spell not found.')
     return render(request, "spell_detail.html", {
