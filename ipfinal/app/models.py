@@ -1,7 +1,9 @@
 from time import time
+from tkinter import CASCADE
 from xml.parsers.expat import model
 from django.db import models
 from django.forms import IntegerField
+from django.contrib.auth.models import User
 
 # Create your models here.
 class School(models.Model):
@@ -34,7 +36,7 @@ class CharacterClass(models.Model):
 class Spell(models.Model):
     name = models.CharField(max_length=20)
     level = models.IntegerField()
-    school = models.ForeignKey(School, on_delete=models.CASCADE)
+    school = models.ForeignKey(School, related_name="spell", on_delete=models.CASCADE)
     materials = models.CharField(max_length=100, default="None")
     range = models.CharField(max_length=20, default="Touch")
     area = models.CharField(max_length=30, default="Target")
@@ -67,12 +69,12 @@ class Spell(models.Model):
     ritual = models.BooleanField(default=False)
     duration = models.CharField(max_length=20, default="None")
     concentration = models.BooleanField()
-    components = models.ManyToManyField(Component, blank=True)
-    damage_type = models.ManyToManyField(DamageType, blank=True)
+    components = models.ManyToManyField(Component, related_name="spell", blank=True)
+    damage_type = models.ManyToManyField(DamageType, related_name="spell", blank=True)
     effects = models.ManyToManyField(Effect, blank=True)
     description = models.TextField(max_length=4000, default="No description provided.")
     upcasting = models.TextField(max_length=1000, default="No additional effects when upcast.")
-    char_class = models.ManyToManyField(CharacterClass, blank=True)
+    char_class = models.ManyToManyField(CharacterClass, related_name="spell", blank=True)
     RATING_OPTIONS = [
         ("No Rating", "No Rating"), 
         ("1/5", "1/5"), 
@@ -83,6 +85,7 @@ class Spell(models.Model):
         ]
     rating = models.IntegerField(choices=RATING_OPTIONS, null = True, blank=True)
     favorite = models.BooleanField(default=False)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="diy_spells")
 
     def __str__(self):
         return f"{self.id}: {self.name}"

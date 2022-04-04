@@ -20,5 +20,13 @@ from django.urls import path
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.index, name="index"),
-    path('spell_detail/<int:spell_id>/', views.spell_detail, name="spell_detail"),
+    path('spell_detail/<str:spell_name>/', views.spell_detail, name="spell_detail"),
+    path('class_spells/<str:class_name>/', views.class_spells, name="class_spells"),
+    path('classes/', views.classes, name="classes"),
+    path('school_spells/<str:school_name>/', views.school_spells, name="school_spells"),
+    path('schools/', views.schools, name="schools"),
+     path("login", views.LoginInterfaceView.as_view(), name="login"),
+    path("logout", views.LogoutInterfaceView.as_view(), name="logout"),
+    path("register", views.RegisterView.as_view(), name="register"),
+    path('custom_spells/', views.custom_spells, name="custom_spells"),
 ]
