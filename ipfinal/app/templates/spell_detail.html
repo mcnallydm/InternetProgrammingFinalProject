@@ -1,5 +1,80 @@
 {% extends "base.html" %}
 
 {% block content %}
+    <div class="card mb-3"
+        {% if spell.school.name != "" %}
+            style="border-color: transparent; background-image: url( '/static/img/{{v_spell.school.name}}.jpg' ); color: white;"
+        {% else %}
+            style="color: black;"
+        {% endif %}
+    >
+        <div class="card-body">
+            <a href="{% url 'spell_detail' v_spell.id %}" style="text-decoration: none;">
+                <h4 class="card-title text-center"
+                {% if spell.school.name != "" %}
+                    style="color: white;"
+                {% else %}
+                style="color: black;"
+                {% endif %}
+                >{{v_spell.name}}</h4>
+            </a>
+            <div class="text-center">{{ v_spell.school.name }}</div>
+            <hr>
+            <div class="card-text">
+                <div class="row">
+                    <div class="col-2">
+                        <strong>Level: </strong>
+                        {% if v_spell.level == 0 %}
+                            Cantrip
+                        {% else %}
+                            {{v_spell.level}}
+                        {% endif %}
+                    </div>
+                    <div class="col-lg-2 col-md-4 col-sm-3 col-3"><strong>Casting Time: </strong>{{v_spell.casting_time}}</div>
+                    <div class="col-lg-2 col-md-4 col-4"><strong>Duration: </strong>{{v_spell.duration}}</div>
+                    <div class="col-lg-2 col-sm-3 col-5"><strong>Components: </strong>
+                    {% if v_spell.components.all %}
+                        {% for com in v_spell.components.all %}
+                            {{com.name}} 
+                        {% endfor %}
+                    {% endif %}
+                    </div>
+                    <div class="col-lg-2 col-3"><strong>Range: </strong>{{v_spell.range}}</div>
+                    <div class="col-2"><strong>Area: </strong>{{v_spell.area}}</div>
+                    <div class="col-2"><strong>Shape: </strong>{{v_spell.area_shape}}</div>
+                    <div class="col-sm-2 col-3"><strong>Attack: </strong>{{v_spell.attack}}</div>
+                    <div class="col-2"><strong>Save: </strong>{{v_spell.saving_throw}}</div>
+                    <div class="col-lg-3 col-4"><strong>Damage Type: </strong>
+                        {% for dam in v_spell.damage_type.all %}
+                            {{dam.name}} 
+                        {% endfor %}
+                    </div>
+                    <div class="col-lg-3 col-sm-4 col-3"><strong>Effect: </strong>
+                        {% for eff in v_spell.effects.all %}
+                            {{eff.name}} 
+                        {% endfor %}
+                    </div>
+                </div>
+                <hr>
+                <div class="row pb-5">
+                    <div class="col-12">{{v_spell.description}}</div>
+                </div>
+                <div class="row pb-3">
+                    <div class="col-12"><strong>If cast using higher level spell slots: </strong>{{v_spell.upcasting}}</div>
+                </div>
+                <hr>
+                {% if v_spell.char_class.all %}
+                    <div class="row">
+                        <div class="col-xl-3 col-lg-4 col-md-5 col-sm-7">Classes that can access this spell:</div>
+                        {% for cls in v_spell.char_class.all %}
+                            <div class="card col-lg-1 col-md-2 col-2 text-center" style="color:black;">
+                                <strong>{{cls.name}}</strong>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
 
 {% endblock %}

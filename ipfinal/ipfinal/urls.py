@@ -20,5 +20,5 @@ from django.urls import path
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.index, name="index"),
-    path('spell_detail/<int:spell_id>', views.spell_detail, name="spell_detail"),
+    path('spell_detail/<int:spell_id>/', views.spell_detail, name="spell_detail"),
 ]

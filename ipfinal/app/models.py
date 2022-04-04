@@ -11,25 +11,25 @@ class School(models.Model):
 
 class Component(models.Model):
     COMPONENT_TYPES = [("V", "Verbal"), ("S", "Somatic"), ("M", "Material")]
-    components = models.CharField(max_length=20, choices=COMPONENT_TYPES, default="None")
+    name = models.CharField(max_length=20, choices=COMPONENT_TYPES, default="None")
     
     def __str__(self):
-        return f"{self.id}: {self.components}"
+        return f"{self.id}: {self.name}"
 
 class DamageType(models.Model):
-    damage_type = models.CharField(max_length=30, default="None")
+    name = models.CharField(max_length=30, default="None")
     def __str__(self):
-        return f"{self.id}: {self.damage_type}"
+        return f"{self.id}: {self.name}"
 
 class Effect(models.Model):
-    effects = models.CharField(max_length=30, default="None")
+    name = models.CharField(max_length=30, default="None")
     def __str__(self):
-        return f"{self.id}: {self.effects}"
+        return f"{self.id}: {self.name}"
 
 class CharacterClass(models.Model):
-    char_class = models.CharField(max_length=70, null=True)
+    name = models.CharField(max_length=70, null=True)
     def __str__(self):
-        return f"{self.id}: {self.char_class}"
+        return f"{self.id}: {self.name}"
 
 class Spell(models.Model):
     name = models.CharField(max_length=20)
