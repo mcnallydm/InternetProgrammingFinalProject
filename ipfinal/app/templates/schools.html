@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <div class="row">
+        {% for school in v_schools %}
+            <div class="col-md-6 col-lg-3">
+                <div class="card mb-3"
+                    {% if spell.school.name != "" %}
+                        style="border-color: transparent; background-image: url( '/static/img/{{school.name}}.jpg' ); color: white;"
+                    {% else %}
+                        style="color: black;"
+                    {% endif %}
+                >
+                    <!--img class="card-img-top" src="/static/img/{{speaker.avatar}}" alt="Vivianne"-->
+                    <div class="card-body">
+                        <a href="{% url 'school_spells' school.name %}" style="text-decoration: none;">
+                            <h4 class="card-title text-center"
+                            {% if spell.school.name != "" %}
+                                style="color: white;"
+                            {% else %}
+                            style="color: black;"
+                            {% endif %}
+                            >{{school.name}}</h4>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}
