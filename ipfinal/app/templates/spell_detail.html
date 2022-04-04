@@ -30,8 +30,16 @@
                             {{v_spell.level}}
                         {% endif %}
                     </div>
-                    <div class="col-lg-2 col-md-4 col-sm-3 col-3"><strong>Casting Time: </strong>{{v_spell.casting_time}}</div>
-                    <div class="col-lg-2 col-md-4 col-4"><strong>Duration: </strong>{{v_spell.duration}}</div>
+                    <div class="col-lg-2 col-md-4 col-sm-3 col-3"><strong>Casting Time: </strong>{{v_spell.casting_time}} 
+                        {% if v_spell.ritual %}
+                             (R)
+                        {% endif %}
+                    </div>
+                    <div class="col-lg-2 col-md-4 col-4"><strong>Duration: </strong>{{v_spell.duration}} 
+                        {% if v_spell.concentration %}
+                            (C)
+                        {% endif %}
+                    </div>
                     <div class="col-lg-2 col-sm-3 col-5"><strong>Components: </strong>
                     {% if v_spell.components.all %}
                         {% for com in v_spell.components.all %}

@@ -3,7 +3,7 @@
 {% block content %}
     <div class="row">
         {% for spell in v_spells %}
-            <div class="col-md-4 col-lg-3">
+            <div class="col-md-6 col-lg-3">
                 <div class="card mb-3"
                     {% if spell.school.name != "" %}
                         style="border-color: transparent; background-image: url( '/static/img/{{spell.school.name}}.jpg' ); color: white;"
@@ -26,7 +26,7 @@
                         <hr>
                         <div class="card-text">
                             <div class="row">
-                                <div class="col-6">
+                                <div class="col-5">
                                     <strong>Level: </strong>
                                     {% if spell.level == 0 %}
                                         Cantrip
@@ -34,8 +34,16 @@
                                         {{spell.level}}
                                     {% endif %}
                                 </div>
-                                <div class="col-6"><strong>Time: </strong>{{spell.casting_time}}</div>
-                                <div class="col-12"><strong>Duration: </strong>{{spell.duration}}</div>
+                                <div class="col-7"><strong>Time: </strong>{{spell.casting_time}} 
+                                    {% if spell.ritual %}
+                                        (R)
+                                    {% endif %}
+                                </div>
+                                <div class="col-12"><strong>Duration: </strong>{{spell.duration}} 
+                                    {% if spell.concentration %}
+                                        (C)
+                                    {% endif %}
+                                </div>
                                 <!--div class="col-12"><strong>Components: </strong>{{spell.components}}</div-->
                                 <div class="col-6"><strong>Range: </strong>{{spell.range}}</div>
                                 <div class="col-6"><strong>Area: </strong>{{spell.area}}</div>
