@@ -63,8 +63,18 @@
                         {% endfor %}
                     </ul>
                 </div>
+                {% if user.is_authenticated %}
+                    <a class="nav-item nav-link" href="{% url 'new_spell' %}" id="addlink">Create</a>
+                {% endif %}
             </div>
         </div>
+        <form class="text-center mr-2" method="POST" action="{% url 'search' %}">
+            {% csrf_token %}
+            <div class="input-group">
+                <input class="form-control" name="q" id="q" type="text" aria-describedby="srch">
+                <button type="submit" class="btn btn-light" id="srch">🔎︎</button>
+            </div>
+        </form>
         {% if user.is_authenticated %}
             <a class="nav-item nav-link text-white mx-2" href="{% url 'custom_spells' %}" id="profilelink">{{ user.username }}</a>
             <a class='btn btn-outline-light' href="{% url 'logout' %}">Logout</a>
