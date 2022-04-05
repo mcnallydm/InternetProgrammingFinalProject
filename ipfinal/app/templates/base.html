@@ -66,6 +66,7 @@
                 </div>
                 {% if user.is_authenticated %}
                     <a class="nav-item nav-link" href="{% url 'new_spell' %}" id="addlink">Create</a>
+                    <a class="nav-item nav-link" href="{% url 'favorites' %}" id="addlink">Favorites</a>
                     <a class="nav-item nav-link" href="{% url 'custom_spells' %}" id="addlink">Custom Spells</a>
                 {% endif %}
             </div>

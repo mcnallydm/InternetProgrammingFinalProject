@@ -36,4 +36,5 @@ urlpatterns = [
     path("search", views.search, name="search"),
     path ("custom_spells/new", views.spellCreateView.as_view(), name="new_spell"),
     path('view_profile/', views.view_profile, name="view_profile"),
+    path('favorites/', views.favorites, name="favorites"),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

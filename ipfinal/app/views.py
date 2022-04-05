@@ -110,6 +110,21 @@ def custom_spells(request):
     })
 
 @login_required
+def favorites(request):
+    try:
+        curr_user = Profile.objects.get(user=request.user)
+        spells_to_view = curr_user.favorites.all
+    except Spell.DoesNotExist:
+        raise Http404('User not found.')
+    results = spells_to_view
+    return render(request, "index.html", {
+        "v_spells" : results,
+        "v_classes" : CharacterClass.objects.all(),
+        "v_schools" : School.objects.all(),
+        "v_levels" : [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+    })
+
+@login_required
 def view_profile(request):
     prof = Profile.objects.get(user=request.user)
     my_faves = prof.favorites.all
