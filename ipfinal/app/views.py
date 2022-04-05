@@ -4,7 +4,7 @@ from django.shortcuts import render
 from datetime import datetime
 from .models import *
 from django.views.generic import CreateView
-#from .forms import *
+from .forms import *
 from django.contrib.auth.views import LoginView, LogoutView
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -19,9 +19,9 @@ def index(request):
         "v_levels" : [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
     })
 
-def spell_detail(request, spell_name):
+def spell_detail(request, spell_id, spell_name):
     try:
-        spell_to_view = Spell.objects.get(name=spell_name)
+        spell_to_view = Spell.objects.get(id=spell_id)
     except Spell.DoesNotExist:
         raise Http404('Spell not found.')
     return render(request, "spell_detail.html", {
@@ -95,7 +95,7 @@ def custom_spells(request):
     try:
         curr_user = request.user
         spells_to_view = Spell.objects.filter(user=curr_user.id)
-    except CharacterClass.DoesNotExist:
+    except Spell.DoesNotExist:
         raise Http404('User not found.')
     results = spells_to_view
     return render(request, "index.html", {
@@ -104,6 +104,75 @@ def custom_spells(request):
         "v_schools" : School.objects.all(),
         "v_levels" : [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
     })
+
+'''def favorites(request):
+    try:
+        curr_user = request.user
+        spells_to_view = Spell.objects.filter(user=curr_user.id, favorite=True)
+    except Spell.DoesNotExist:
+        raise Http404('User not found.')
+    results = spells_to_view
+    return render(request, "index.html", {
+        "v_spells" : results,
+        "v_classes" : CharacterClass.objects.all(),
+        "v_schools" : School.objects.all(),
+        "v_levels" : [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+    })'''
+
+
+'''def search(request):
+    if request.method == "POST":
+        keyword = request.POST["q"]
+
+        if keyword.lower()=="ritual":
+            results = Spell.objects.filter(ritual = True)
+        elif keyword.lower()=="concentration":
+            results = Spell.objects.filter(concentration = True)
+        else:
+            results = Spell.objects.filter(description__contains = keyword) | \
+                Spell.objects.filter(name__contains = keyword) | \
+                Spell.objects.filter(level__contains = keyword) | \
+                Spell.objects.filter(school__contains = keyword) | \
+                Spell.objects.filter(materials__contains = keyword) | \
+                Spell.objects.filter(range__contains = keyword) | \
+                Spell.objects.filter(area__contains = keyword) | \
+                Spell.objects.filter(area_shape__contains = keyword) | \
+                Spell.objects.filter(attack__contains = keyword) | \
+                Spell.objects.filter(saving_throw__contains = keyword) | \
+                Spell.objects.filter(casting_time__contains = keyword) | \
+                Spell.objects.filter(duration__contains = keyword) | \
+                Spell.objects.filter(upcasting__contains = keyword) | \
+        return render(request, "fullstack/speakers.html", {
+            "v_speakers" : results
+        })'''
+    
+def search(request):
+    if request.method == "POST":
+        keyword = request.POST["q"]
+    if keyword.lower()=="ritual":
+            results = Spell.objects.filter(ritual = True)
+    elif keyword.lower()=="concentration":
+        results = Spell.objects.filter(concentration = True)
+    else:
+        results = Spell.objects.filter(name__contains = keyword) | \
+            Spell.objects.filter(description__contains = keyword) | \
+            Spell.objects.filter(upcasting__contains = keyword)
+    return render(request, "index.html", {
+            "v_spells" : results,
+        "v_classes" : CharacterClass.objects.all(),
+        "v_schools" : School.objects.all(),
+        "v_levels" : [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+        })
+
+class spellCreateView(LoginRequiredMixin, CreateView):
+    template_name = 'spell_form.html'
+    model = Spell
+    success_url = "/custom_spells"
+    form_class = SpellForm
+    login_url = "/login"
+    def form_valid(self, form):
+        form.instance.user = self.request.user
+        return super().form_valid(form)
 
 class LoginInterfaceView(LoginView):
     template_name = 'login.html'

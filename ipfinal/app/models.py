@@ -8,35 +8,34 @@ from django.contrib.auth.models import User
 class School(models.Model):
     name = models.CharField(max_length=30, blank=True)
     def __str__(self):
-        return f"{self.id}: {self.name}"
+        return f"{self.name}"
 
 class Component(models.Model):
     COMPONENT_TYPES = [("V", "Verbal"), ("S", "Somatic"), ("M", "Material")]
     name = models.CharField(max_length=20, choices=COMPONENT_TYPES, default="None")
     
     def __str__(self):
-        return f"{self.id}: {self.name}"
+        return f"{self.name}"
 
 class DamageType(models.Model):
     name = models.CharField(max_length=30, default="None")
     def __str__(self):
-        return f"{self.id}: {self.name}"
+        return f"{self.name}"
 
 class Effect(models.Model):
     name = models.CharField(max_length=30, default="None")
     def __str__(self):
-        return f"{self.id}: {self.name}"
+        return f"{self.name}"
 
 class CharacterClass(models.Model):
     name = models.CharField(max_length=70, null=True)
     def __str__(self):
-        return f"{self.id}: {self.name}"
+        return f"{self.name}"
 
 class Spell(models.Model):
     name = models.CharField(max_length=40)
-    level = models.IntegerField()
+    level = models.IntegerField(help_text = "Enter 0 for cantrips")
     school = models.ForeignKey(School, related_name="spell", on_delete=models.CASCADE)
-    materials = models.CharField(max_length=100, default="None")
     range = models.CharField(max_length=20, default="Touch")
     area = models.CharField(max_length=30, default="Target")
     AREA_TYPES = [
@@ -69,6 +68,7 @@ class Spell(models.Model):
     duration = models.CharField(max_length=20, default="None")
     concentration = models.BooleanField()
     components = models.ManyToManyField(Component, related_name="spell", blank=True)
+    materials = models.CharField(max_length=100, default="None")
     damage_type = models.ManyToManyField(DamageType, related_name="spell", blank=True)
     effects = models.ManyToManyField(Effect, blank=True)
     description = models.TextField(max_length=4000, default="No description provided.")
@@ -87,4 +87,4 @@ class Spell(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="diy_spells")
 
     def __str__(self):
-        return f"{self.id}: {self.name}"
+        return f"{self.name}"

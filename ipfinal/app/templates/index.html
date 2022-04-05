@@ -13,7 +13,7 @@
                 >
                     <!--img class="card-img-top" src="/static/img/{{speaker.avatar}}" alt="Vivianne"-->
                     <div class="card-body">
-                        <a href="{% url 'spell_detail' spell.name %}" style="text-decoration: none;">
+                        <a href="{% url 'spell_detail' spell.id spell.name %}" style="text-decoration: none;">
                             <h4 class="card-title text-center"
                             {% if spell.school.name != "" %}
                                 style="color: white;"
