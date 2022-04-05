@@ -49,6 +49,20 @@
                         {% endfor %}
                     </ul>
                 </div>
+                <div class="dropdown">
+                    <a class="nav-item nav-link" href="{% url 'levels' %}" id="levelslink">Levels</a>
+                    <ul class="dropdown-menu" aria-labelledby="schoolslink">
+                        {% for lv in v_levels %}
+                            <li><a class="dropdown-item" href="/level_spells/{{ lv }}">
+                                {% if lv == 0 %}
+                                    Cantrip
+                                {% else %}
+                                    {{lv}}
+                                {% endif %}
+                            </a></li>
+                        {% endfor %}
+                    </ul>
+                </div>
             </div>
         </div>
         {% if user.is_authenticated %}

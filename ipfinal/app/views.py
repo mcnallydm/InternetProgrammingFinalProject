@@ -15,7 +15,8 @@ def index(request):
     return render(request, 'index.html', {
         "v_spells" : Spell.objects.filter(user=1)|Spell.objects.filter(user=curr_user.id),
         "v_classes" : CharacterClass.objects.all(),
-        "v_schools" : School.objects.all()
+        "v_schools" : School.objects.all(),
+        "v_levels" : [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
     })
 
 def spell_detail(request, spell_name):
@@ -26,7 +27,8 @@ def spell_detail(request, spell_name):
     return render(request, "spell_detail.html", {
         "v_spell" : spell_to_view,
         "v_classes" : CharacterClass.objects.all(),
-        "v_schools" : School.objects.all()
+        "v_schools" : School.objects.all(),
+        "v_levels" : [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
     })
 
 def class_spells(request, class_name):
@@ -39,13 +41,15 @@ def class_spells(request, class_name):
     return render(request, "index.html", {
         "v_spells" : results,
         "v_classes" : CharacterClass.objects.all(),
-        "v_schools" : School.objects.all()
+        "v_schools" : School.objects.all(),
+        "v_levels" : [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
     })
 
 def classes(request):
     return render(request, "classes.html", {
         "v_classes" : CharacterClass.objects.all(),
         "v_schools" : School.objects.all(),
+        "v_levels" : [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
     })
 
 def school_spells(request, school_name):
@@ -57,13 +61,15 @@ def school_spells(request, school_name):
     return render(request, "index.html", {
         "v_spells" : results,
         "v_classes" : CharacterClass.objects.all(),
-        "v_schools" : School.objects.all()
+        "v_schools" : School.objects.all(),
+        "v_levels" : [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
     })
 
 def schools(request):
     return render(request, "schools.html", {
         "v_classes" : CharacterClass.objects.all(),
         "v_schools" : School.objects.all(),
+        "v_levels" : [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
     })
 
 def level_spells(request, level_num):
@@ -95,7 +101,8 @@ def custom_spells(request):
     return render(request, "index.html", {
         "v_spells" : results,
         "v_classes" : CharacterClass.objects.all(),
-        "v_schools" : School.objects.all()
+        "v_schools" : School.objects.all(),
+        "v_levels" : [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
     })
 
 class LoginInterfaceView(LoginView):

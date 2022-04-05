@@ -22,7 +22,7 @@
             <hr>
             <div class="card-text">
                 <div class="row">
-                    <div class="col-2">
+                    <div class="col">
                         <strong>Level: </strong>
                         {% if v_spell.level == 0 %}
                             Cantrip
@@ -30,34 +30,34 @@
                             {{v_spell.level}}
                         {% endif %}
                     </div>
-                    <div class="col-lg-2 col-md-4 col-sm-3 col-3"><strong>Casting Time: </strong>{{v_spell.casting_time}} 
+                    <div class="col"><strong>Casting Time: </strong>{{v_spell.casting_time}} 
                         {% if v_spell.ritual %}
                              (R)
                         {% endif %}
                     </div>
-                    <div class="col-lg-2 col-md-4 col-4"><strong>Duration: </strong>{{v_spell.duration}} 
+                    <div class="col"><strong>Duration: </strong>{{v_spell.duration}} 
                         {% if v_spell.concentration %}
                             (C)
                         {% endif %}
                     </div>
-                    <div class="col-lg-2 col-sm-3 col-5"><strong>Components: </strong>
+                    <div class="col"><strong>Components: </strong>
                     {% if v_spell.components.all %}
                         {% for com in v_spell.components.all %}
                             {{com.name}} 
                         {% endfor %}
                     {% endif %}
                     </div>
-                    <div class="col-lg-2 col-3"><strong>Range: </strong>{{v_spell.range}}</div>
-                    <div class="col-2"><strong>Area: </strong>{{v_spell.area}}</div>
-                    <div class="col-2"><strong>Shape: </strong>{{v_spell.area_shape}}</div>
-                    <div class="col-sm-2 col-3"><strong>Attack: </strong>{{v_spell.attack}}</div>
-                    <div class="col-2"><strong>Save: </strong>{{v_spell.saving_throw}}</div>
-                    <div class="col-lg-3 col-4"><strong>Damage Type: </strong>
+                    <div class="col"><strong>Range: </strong>{{v_spell.range}}</div>
+                    <div class="col"><strong>Area: </strong>{{v_spell.area}}</div>
+                    <div class="col"><strong>Shape: </strong>{{v_spell.area_shape}}</div>
+                    <div class="col"><strong>Attack: </strong>{{v_spell.attack}}</div>
+                    <div class="col"><strong>Save: </strong>{{v_spell.saving_throw}}</div>
+                    <div class="col"><strong>Damage Type: </strong>
                         {% for dam in v_spell.damage_type.all %}
                             {{dam.name}} 
                         {% endfor %}
                     </div>
-                    <div class="col-lg-3 col-sm-4 col-3"><strong>Effect: </strong>
+                    <div class="col"><strong>Effect: </strong>
                         {% for eff in v_spell.effects.all %}
                             {{eff.name}} 
                         {% endfor %}
@@ -81,10 +81,12 @@
                         {% endfor %}
                     </div>
                 {% endif %}
-                <hr>
-                <div class="text-end">
-                    <strong>Spell created by: </strong>{{v_spell.user.username}}
-                </div>
+                {% if v_spell.user.id != 1 %}
+                    <hr>
+                    <div class="text-end">
+                        <strong>Spell created by: </strong>{{v_spell.user.username}}
+                    </div>
+                {% endif %}
             </div>
         </div>
     </div>
