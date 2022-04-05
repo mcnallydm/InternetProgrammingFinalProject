@@ -66,6 +66,25 @@ def schools(request):
         "v_schools" : School.objects.all(),
     })
 
+def level_spells(request, level_num):
+    try:
+        results = Spell.objects.filter(level=level_num)
+    except Spell.DoesNotExist:
+        raise Http404('Spell Level not found.')
+    return render(request, "index.html", {
+        "v_spells" : results,
+        "v_classes" : CharacterClass.objects.all(),
+        "v_schools" : School.objects.all(),
+        "v_levels" : [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+    })
+
+def levels(request):
+    return render(request, "levels.html", {
+        "v_classes" : CharacterClass.objects.all(),
+        "v_schools" : School.objects.all(),
+        "v_levels" : [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+    })
+
 def custom_spells(request):
     try:
         curr_user = request.user
