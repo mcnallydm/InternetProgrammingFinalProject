@@ -33,7 +33,7 @@ class CharacterClass(models.Model):
         return f"{self.id}: {self.name}"
 
 class Spell(models.Model):
-    name = models.CharField(max_length=20)
+    name = models.CharField(max_length=40)
     level = models.IntegerField()
     school = models.ForeignKey(School, related_name="spell", on_delete=models.CASCADE)
     materials = models.CharField(max_length=100, default="None")

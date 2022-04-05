@@ -1,18 +1,18 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div class="row">
-    {% for cls in v_classes %}
-        <div class="col-md-6 col-lg-3">
-            <div class="card mb-3" style="color: black;">
-                <!--img class="card-img-top" src="/static/img/{{speaker.avatar}}" alt="Vivianne"-->
-                <div class="card-body">
-                    <a href="{% url 'class_spells' cls.name %}" style="text-decoration: none;">
-                        <h4 class="card-title text-center" style="color: black;">{{cls.name}}</h4>
-                    </a>
+    <div class="row">
+        {% for cls in v_classes %}
+            <div class="col-md-6 col-lg-3">
+                <div class="card mb-3" style="color: black;">
+                    <!--img class="card-img-top" src="/static/img/{{speaker.avatar}}" alt="Vivianne"-->
+                    <div class="card-body">
+                        <a href="{% url 'class_spells' cls.name %}" style="text-decoration: none;">
+                            <h4 class="card-title text-center" style="color: black;">{{cls.name}}</h4>
+                        </a>
+                    </div>
                 </div>
             </div>
-        </div>
-    {% endfor %}
-</div>
+        {% endfor %}
+    </div>
 {% endblock %}
