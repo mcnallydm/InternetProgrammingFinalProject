@@ -8,12 +8,15 @@ from .forms import *
 from django.contrib.auth.views import LoginView, LogoutView
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.decorators import login_required
 # Create your views here.
 
 def index(request):
-    curr_user = request.user
+    og = Profile.objects.get(id=1)
+    spells = Spell.objects.filter(creator=og)
+    results = spells.order_by('name')
     return render(request, 'index.html', {
-        "v_spells" : Spell.objects.filter(user=1)|Spell.objects.filter(user=curr_user.id),
+        "v_spells" : results,
         "v_classes" : CharacterClass.objects.all(),
         "v_schools" : School.objects.all(),
         "v_levels" : [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
@@ -91,10 +94,11 @@ def levels(request):
         "v_levels" : [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
     })
 
+@login_required
 def custom_spells(request):
     try:
-        curr_user = request.user
-        spells_to_view = Spell.objects.filter(user=curr_user.id)
+        curr_user = Profile.objects.get(user=request.user)
+        spells_to_view = Spell.objects.filter(creator=curr_user)
     except Spell.DoesNotExist:
         raise Http404('User not found.')
     results = spells_to_view
@@ -105,64 +109,53 @@ def custom_spells(request):
         "v_levels" : [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
     })
 
-'''def favorites(request):
-    try:
-        curr_user = request.user
-        spells_to_view = Spell.objects.filter(user=curr_user.id, favorite=True)
-    except Spell.DoesNotExist:
-        raise Http404('User not found.')
-    results = spells_to_view
-    return render(request, "index.html", {
-        "v_spells" : results,
+@login_required
+def view_profile(request):
+    prof = Profile.objects.get(user=request.user)
+    my_faves = prof.favorites.all
+    my_spells = prof.created_spells.all
+    return render(request, "view_profile.html", {
+        "v_prof": prof,
+        "v_faves": my_faves,
+        "v_cspells": my_spells,
         "v_classes" : CharacterClass.objects.all(),
         "v_schools" : School.objects.all(),
         "v_levels" : [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
-    })'''
+    })
 
-
-'''def search(request):
-    if request.method == "POST":
-        keyword = request.POST["q"]
-
-        if keyword.lower()=="ritual":
-            results = Spell.objects.filter(ritual = True)
-        elif keyword.lower()=="concentration":
-            results = Spell.objects.filter(concentration = True)
-        else:
-            results = Spell.objects.filter(description__contains = keyword) | \
-                Spell.objects.filter(name__contains = keyword) | \
-                Spell.objects.filter(level__contains = keyword) | \
-                Spell.objects.filter(school__contains = keyword) | \
-                Spell.objects.filter(materials__contains = keyword) | \
-                Spell.objects.filter(range__contains = keyword) | \
-                Spell.objects.filter(area__contains = keyword) | \
-                Spell.objects.filter(area_shape__contains = keyword) | \
-                Spell.objects.filter(attack__contains = keyword) | \
-                Spell.objects.filter(saving_throw__contains = keyword) | \
-                Spell.objects.filter(casting_time__contains = keyword) | \
-                Spell.objects.filter(duration__contains = keyword) | \
-                Spell.objects.filter(upcasting__contains = keyword) | \
-        return render(request, "fullstack/speakers.html", {
-            "v_speakers" : results
-        })'''
-    
 def search(request):
     if request.method == "POST":
         keyword = request.POST["q"]
-    if keyword.lower()=="ritual":
-            results = Spell.objects.filter(ritual = True)
-    elif keyword.lower()=="concentration":
-        results = Spell.objects.filter(concentration = True)
-    else:
-        results = Spell.objects.filter(name__contains = keyword) | \
-            Spell.objects.filter(description__contains = keyword) | \
-            Spell.objects.filter(upcasting__contains = keyword)
+    try:
+        og = Profile.objects.get(id=1)
+        curr_user=Profile.objects.get(user=request.user)
+        if keyword.lower()=="ritual":
+                results = Spell.objects.filter(ritual=True).filter(creator=og)|Spell.objects.filter(ritual=True).filter(creator=curr_user)
+        elif keyword.lower()=="concentration":
+            results = Spell.objects.filter(concentration=True).filter(creator=og)|Spell.objects.filter(concentration=True).filter(creator=curr_user)
+        else:
+            results = Spell.objects.filter(name__contains = keyword).filter(creator=og) | \
+                Spell.objects.filter(description__contains = keyword).filter(creator=og) | \
+                Spell.objects.filter(upcasting__contains = keyword).filter(creator=og) | \
+                Spell.objects.filter(name__contains = keyword).filter(creator=curr_user) | \
+                Spell.objects.filter(description__contains = keyword).filter(creator=curr_user) | \
+                Spell.objects.filter(upcasting__contains = keyword).filter(creator=curr_user)
+    except TypeError:
+            if keyword.lower()=="ritual":
+                    results = Spell.objects.filter(ritual = True).filter(creator=Profile.objects.get(id=1))
+            elif keyword.lower()=="concentration":
+                results = Spell.objects.filter(concentration = True).filter(creator=Profile.objects.get(id=1))
+            else:
+                results = Spell.objects.filter(name__contains = keyword) | \
+                    Spell.objects.filter(description__contains = keyword) | \
+                    Spell.objects.filter(upcasting__contains = keyword).filter(creator=Profile.objects.get(id=1))
     return render(request, "index.html", {
             "v_spells" : results,
-        "v_classes" : CharacterClass.objects.all(),
-        "v_schools" : School.objects.all(),
-        "v_levels" : [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
-        })
+            "v_classes" : CharacterClass.objects.all(),
+            "v_schools" : School.objects.all(),
+            "v_levels" : [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+    })
+    
 
 class spellCreateView(LoginRequiredMixin, CreateView):
     template_name = 'spell_form.html'
@@ -171,7 +164,7 @@ class spellCreateView(LoginRequiredMixin, CreateView):
     form_class = SpellForm
     login_url = "/login"
     def form_valid(self, form):
-        form.instance.user = self.request.user
+        form.instance.creator = Profile.objects.get(user=self.request.user)
         return super().form_valid(form)
 
 class LoginInterfaceView(LoginView):

@@ -15,6 +15,8 @@ Including another URLconf
 """
 from app import views
 from django.contrib import admin
+from django.conf import settings
+from django.conf.urls.static import static
 from django.urls import path
 
 urlpatterns = [
@@ -33,4 +35,5 @@ urlpatterns = [
     path('custom_spells/', views.custom_spells, name="custom_spells"),
     path("search", views.search, name="search"),
     path ("custom_spells/new", views.spellCreateView.as_view(), name="new_spell"),
-]
+    path('view_profile/', views.view_profile, name="view_profile"),
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -1,0 +1,127 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <div class="row my-3 p-3">
+        <img src="/media/{{v_prof.avatar}}" class="text-center rounded-circle" style="width:20rem;">
+        <h1>{{v_prof.user.username}}</h1>
+        <hr>
+        <h3>Bio</h3>
+        <div class="form-control-plaintext">{{v_prof.bio}}</div>
+        {% if v_prof.favorites.all %}
+            <hr>
+            <h3>Favorites</h3>
+            <div class="row">
+                {% for spell in v_faves %}
+                    <div class="col-md-6 col-lg-3">
+                        <div class="card mb-3"
+                            {% if spell.school.name != "" %}
+                                style="border-color: transparent; background-image: url( '/static/img/{{spell.school.name}}.jpg' ); color: white;"
+                            {% else %}
+                                style="color: black;"
+                            {% endif %}
+                        >
+                            <div class="card-body">
+                                <a href="{% url 'spell_detail' spell.id spell.name %}" style="text-decoration: none;">
+                                    <h4 class="card-title text-center"
+                                    {% if spell.school.name != "" %}
+                                        style="color: white;"
+                                    {% else %}
+                                    style="color: black;"
+                                    {% endif %}
+                                    >{{spell.name}}</h4>
+                                </a>
+                                <div class="text-center">{{ spell.school.name }}</div>
+                                <hr>
+                                <div class="card-text">
+                                    <div class="row">
+                                        <div class="col-5">
+                                            <strong>Level: </strong>
+                                            {% if spell.level == 0 %}
+                                                Cantrip
+                                            {% else %}
+                                                {{spell.level}}
+                                            {% endif %}
+                                        </div>
+                                        <div class="col-7"><strong>Time: </strong>{{spell.casting_time}} 
+                                            {% if spell.ritual %}
+                                                (R)
+                                            {% endif %}
+                                        </div>
+                                        <div class="col-12"><strong>Duration: </strong>{{spell.duration}} 
+                                            {% if spell.concentration %}
+                                                (C)
+                                            {% endif %}
+                                        </div>
+                                        <div class="col-6"><strong>Range: </strong>{{spell.range}}</div>
+                                        <div class="col-6"><strong>Area: </strong>{{spell.area}}</div>
+                                        <div class="col-12"><strong>Shape: </strong>{{spell.area_shape}}</div>
+                                        <div class="col-6"><strong>Attack: </strong>{{spell.attack}}</div>
+                                        <div class="col-6"><strong>Save: </strong>{{spell.saving_throw}}</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+        {% if v_prof.created_spells.all %}
+            <hr>
+            <h3>Created Spells</h3>
+            <div class="row">
+                {% for spell in v_cspells %}
+                    <div class="col-md-6 col-lg-3">
+                        <div class="card mb-3"
+                            {% if spell.school.name != "" %}
+                                style="border-color: transparent; background-image: url( '/static/img/{{spell.school.name}}.jpg' ); color: white;"
+                            {% else %}
+                                style="color: black;"
+                            {% endif %}
+                        >
+                            <div class="card-body">
+                                <a href="{% url 'spell_detail' spell.id spell.name %}" style="text-decoration: none;">
+                                    <h4 class="card-title text-center"
+                                    {% if spell.school.name != "" %}
+                                        style="color: white;"
+                                    {% else %}
+                                    style="color: black;"
+                                    {% endif %}
+                                    >{{spell.name}}</h4>
+                                </a>
+                                <div class="text-center">{{ spell.school.name }}</div>
+                                <hr>
+                                <div class="card-text">
+                                    <div class="row">
+                                        <div class="col-5">
+                                            <strong>Level: </strong>
+                                            {% if spell.level == 0 %}
+                                                Cantrip
+                                            {% else %}
+                                                {{spell.level}}
+                                            {% endif %}
+                                        </div>
+                                        <div class="col-7"><strong>Time: </strong>{{spell.casting_time}} 
+                                            {% if spell.ritual %}
+                                                (R)
+                                            {% endif %}
+                                        </div>
+                                        <div class="col-12"><strong>Duration: </strong>{{spell.duration}} 
+                                            {% if spell.concentration %}
+                                                (C)
+                                            {% endif %}
+                                        </div>
+                                        <div class="col-6"><strong>Range: </strong>{{spell.range}}</div>
+                                        <div class="col-6"><strong>Area: </strong>{{spell.area}}</div>
+                                        <div class="col-12"><strong>Shape: </strong>{{spell.area_shape}}</div>
+                                        <div class="col-6"><strong>Attack: </strong>{{spell.attack}}</div>
+                                        <div class="col-6"><strong>Save: </strong>{{spell.saving_throw}}</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    </div>
+{% endblock %}

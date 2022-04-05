@@ -2,7 +2,7 @@ from time import time
 from xml.parsers.expat import model
 from django.db import models
 from django.forms import IntegerField
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, AbstractUser
 
 # Create your models here.
 class School(models.Model):
@@ -82,9 +82,15 @@ class Spell(models.Model):
         ("4/5", "4/5"), 
         ("5/5", "5/5")
         ]
-    rating = models.IntegerField(choices=RATING_OPTIONS, null = True, blank=True)
-    favorite = models.BooleanField(default=False)
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="diy_spells")
 
     def __str__(self):
         return f"{self.name}"
+
+class Profile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="profile")
+    bio = models.TextField(max_length=1000, blank=True)
+    avatar = models.ImageField(default='default.png', upload_to='profile_images')
+    favorites = models.ManyToManyField(Spell, related_name="favorited_by", blank=True)
+    created_spells = models.ManyToManyField(Spell, related_name="creator", blank=True)
+    def __str__(self):
+        return f"{self.user.username}"
