@@ -52,3 +52,25 @@ ul.errorlist {
 .stars :checked ~ label {
     color: gold;
 }
+
+.fave input{
+    display: none;
+}
+
+.like {
+    display: flex;
+    flex-direction: row;
+}
+
+.like i {
+    transition: all .3s;
+}
+
+.like i:hover {
+    transform: scale(1.1) rotate(5deg);
+    cursor: pointer;
+}
+
+.like :checked ~ label {
+    color: gold;
+}

@@ -1,5 +1,5 @@
 from django.http.response import HttpResponse
-from django.http import Http404
+from django.http import Http404, JsonResponse
 from django.shortcuts import render
 from datetime import datetime
 from .models import *
@@ -15,26 +15,46 @@ def index(request):
     og = Profile.objects.get(id=1)
     spells = Spell.objects.filter(creator=og)
     results = spells.order_by('name')
+    faves=[]
+    try:
+        curr_user = Profile.objects.get(user=request.user)
+        faves = Rating.objects.filter(player=curr_user).filter(favorite=True)
+    except:
+        pass
     return render(request, 'index.html', {
         "v_spells" : results,
-        "v_classes" : CharacterClass.objects.all(),
+        "v_faves": faves,
+        "v_classes" : CharacterClass.objects.all().order_by('name'),
         "v_schools" : School.objects.all(),
         "v_levels" : [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
     })
 
 def spell_detail(request, spell_id, spell_name):
+    faves=[]
+    try:
+        curr_user = Profile.objects.get(user=request.user)
+        faves = Rating.objects.filter(player=curr_user).filter(favorite=True)
+    except:
+        pass
     try:
         spell_to_view = Spell.objects.get(id=spell_id)
     except Spell.DoesNotExist:
         raise Http404('Spell not found.')
     return render(request, "spell_detail.html", {
         "v_spell" : spell_to_view,
-        "v_classes" : CharacterClass.objects.all(),
+        "v_faves": faves,
+        "v_classes" : CharacterClass.objects.all().order_by('name'),
         "v_schools" : School.objects.all(),
         "v_levels" : [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
     })
 
 def class_spells(request, class_name):
+    faves=[]
+    try:
+        curr_user = Profile.objects.get(user=request.user)
+        faves = Rating.objects.filter(player=curr_user).filter(favorite=True)
+    except:
+        pass
     try:
         class_to_view = CharacterClass.objects.get(name=class_name)
     except CharacterClass.DoesNotExist:
@@ -43,19 +63,26 @@ def class_spells(request, class_name):
     results = class_to_view.spell.all
     return render(request, "index.html", {
         "v_spells" : results,
-        "v_classes" : CharacterClass.objects.all(),
+        "v_faves": faves,
+        "v_classes" : CharacterClass.objects.all().order_by('name'),
         "v_schools" : School.objects.all(),
         "v_levels" : [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
     })
 
 def classes(request):
     return render(request, "classes.html", {
-        "v_classes" : CharacterClass.objects.all(),
+        "v_classes" : CharacterClass.objects.all().order_by('name'),
         "v_schools" : School.objects.all(),
         "v_levels" : [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
     })
 
 def school_spells(request, school_name):
+    faves=[]
+    try:
+        curr_user = Profile.objects.get(user=request.user)
+        faves = Rating.objects.filter(player=curr_user).filter(favorite=True)
+    except:
+        pass
     try:
         school_to_view = School.objects.get(name=school_name)
     except CharacterClass.DoesNotExist:
@@ -63,39 +90,53 @@ def school_spells(request, school_name):
     results = school_to_view.spell.all
     return render(request, "index.html", {
         "v_spells" : results,
-        "v_classes" : CharacterClass.objects.all(),
+        "v_faves": faves,
+        "v_classes" : CharacterClass.objects.all().order_by('name'),
         "v_schools" : School.objects.all(),
         "v_levels" : [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
     })
 
 def schools(request):
     return render(request, "schools.html", {
-        "v_classes" : CharacterClass.objects.all(),
+        "v_classes" : CharacterClass.objects.all().order_by('name'),
         "v_schools" : School.objects.all(),
         "v_levels" : [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
     })
 
 def level_spells(request, level_num):
+    faves=[]
+    try:
+        curr_user = Profile.objects.get(user=request.user)
+        faves = Rating.objects.filter(player=curr_user).filter(favorite=True)
+    except:
+        pass
     try:
         results = Spell.objects.filter(level=level_num)
     except Spell.DoesNotExist:
         raise Http404('Spell Level not found.')
     return render(request, "index.html", {
         "v_spells" : results,
-        "v_classes" : CharacterClass.objects.all(),
+        "v_faves": faves,
+        "v_classes" : CharacterClass.objects.all().order_by('name'),
         "v_schools" : School.objects.all(),
         "v_levels" : [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
     })
 
 def levels(request):
     return render(request, "levels.html", {
-        "v_classes" : CharacterClass.objects.all(),
+        "v_classes" : CharacterClass.objects.all().order_by('name'),
         "v_schools" : School.objects.all(),
         "v_levels" : [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
     })
 
 @login_required
 def custom_spells(request):
+    faves=[]
+    try:
+        curr_user = Profile.objects.get(user=request.user)
+        faves = Rating.objects.filter(player=curr_user).filter(favorite=True)
+    except:
+        pass
     try:
         curr_user = Profile.objects.get(user=request.user)
         spells_to_view = Spell.objects.filter(creator=curr_user)
@@ -104,41 +145,79 @@ def custom_spells(request):
     results = spells_to_view
     return render(request, "index.html", {
         "v_spells" : results,
-        "v_classes" : CharacterClass.objects.all(),
+        "v_faves": faves,
+        "v_classes" : CharacterClass.objects.all().order_by('name'),
         "v_schools" : School.objects.all(),
         "v_levels" : [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
     })
 
 @login_required
 def favorites(request):
+    faves=[]
     try:
         curr_user = Profile.objects.get(user=request.user)
-        spells_to_view = curr_user.favorites.all
+        faves = Rating.objects.filter(player=curr_user).filter(favorite=True)
+    except:
+        pass
+    try:
+        curr_user = Profile.objects.get(user=request.user)
+        faves = Rating.objects.filter(player=curr_user).filter(favorite=True)
+        spells_to_view = []
+        for rat in faves:
+            spells_to_view.append(rat.spell)
     except Spell.DoesNotExist:
         raise Http404('User not found.')
     results = spells_to_view
     return render(request, "index.html", {
         "v_spells" : results,
-        "v_classes" : CharacterClass.objects.all(),
+        "v_faves": faves,
+        "v_classes" : CharacterClass.objects.all().order_by('name'),
         "v_schools" : School.objects.all(),
         "v_levels" : [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
     })
 
 @login_required
 def view_profile(request):
+    faves=[]
+    try:
+        curr_user = Profile.objects.get(user=request.user)
+        faves = Rating.objects.filter(player=curr_user).filter(favorite=True)
+    except:
+        pass
     prof = Profile.objects.get(user=request.user)
-    my_faves = prof.favorites.all
+    faves = Rating.objects.filter(player=prof).filter(favorite=True)
+    my_faves = []
+    for rat in faves:
+        my_faves.append(rat.spell)
     my_spells = prof.created_spells.all
     return render(request, "view_profile.html", {
         "v_prof": prof,
-        "v_faves": my_faves,
+        "v_faves": faves,
+        "v_myfaves": my_faves,
         "v_cspells": my_spells,
-        "v_classes" : CharacterClass.objects.all(),
+        "v_classes" : CharacterClass.objects.all().order_by('name'),
         "v_schools" : School.objects.all(),
         "v_levels" : [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
     })
 
+@login_required
+def edit_bio(request):
+    if request.method == "POST":
+        bio = request.POST["bio"]
+        prof = Profile.objects.get(user=request.user)
+        prof.bio = bio
+        prof.save()
+        return JsonResponse({"msg": "ok"}, status=200)
+    else:
+        return render(request, "index.html")
+
 def search(request):
+    faves=[]
+    try:
+        curr_user = Profile.objects.get(user=request.user)
+        faves = Rating.objects.filter(player=curr_user).filter(favorite=True)
+    except:
+        pass
     if request.method == "POST":
         keyword = request.POST["q"]
     try:
@@ -156,21 +235,63 @@ def search(request):
                 Spell.objects.filter(description__contains = keyword).filter(creator=curr_user) | \
                 Spell.objects.filter(upcasting__contains = keyword).filter(creator=curr_user)
     except TypeError:
-            if keyword.lower()=="ritual":
-                    results = Spell.objects.filter(ritual = True).filter(creator=Profile.objects.get(id=1))
-            elif keyword.lower()=="concentration":
-                results = Spell.objects.filter(concentration = True).filter(creator=Profile.objects.get(id=1))
-            else:
-                results = Spell.objects.filter(name__contains = keyword) | \
-                    Spell.objects.filter(description__contains = keyword) | \
-                    Spell.objects.filter(upcasting__contains = keyword).filter(creator=Profile.objects.get(id=1))
+        if keyword.lower()=="ritual":
+                results = Spell.objects.filter(ritual = True).filter(creator=Profile.objects.get(id=1))
+        elif keyword.lower()=="concentration":
+            results = Spell.objects.filter(concentration = True).filter(creator=Profile.objects.get(id=1))
+        else:
+            results = Spell.objects.filter(name__contains = keyword) | \
+                Spell.objects.filter(description__contains = keyword) | \
+                Spell.objects.filter(upcasting__contains = keyword).filter(creator=Profile.objects.get(id=1))
     return render(request, "index.html", {
-            "v_spells" : results,
-            "v_classes" : CharacterClass.objects.all(),
-            "v_schools" : School.objects.all(),
-            "v_levels" : [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+        "v_spells" : results,
+        "v_faves": faves,
+        "v_classes" : CharacterClass.objects.all().order_by('name'),
+        "v_schools" : School.objects.all(),
+        "v_levels" : [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
     })
-    
+
+@login_required    
+def new_favorite(request):
+    if request.method == "POST":
+        favorite_str = request.POST["favorite"]
+        if favorite_str=="True":
+            favorite = True
+        else:
+            favorite=False
+        spell_id = request.POST["spell_id"]
+        spell = Spell.objects.get(id=spell_id)
+        faved_by = Profile.objects.get(user=request.user)
+        try:
+            temp = Rating.objects.filter(spell=spell).get(player=faved_by)
+            temp.favorite = favorite
+        except:
+            temp = Rating(spell=spell, player=faved_by, favorite=favorite)
+        temp.save()
+        return JsonResponse({"msg": "ok"}, status=200)
+    else:
+        return render(request, "index.html")
+
+@login_required    
+def new_rating(request):
+    if request.method == "POST":
+        favorite_str = request.POST["favorite"]
+        if favorite_str=="True":
+            favorite = True
+        else:
+            favorite=False
+        spell_id = request.POST["spell_id"]
+        spell = Spell.objects.get(id=spell_id)
+        faved_by = Profile.objects.get(user=request.user)
+        try:
+            temp = Rating.objects.filter(spell=spell).get(player=faved_by)
+            temp.favorite = favorite
+        except:
+            temp = Rating(spell=spell, player=faved_by, favorite=favorite)
+        temp.save()
+        return JsonResponse({"msg": "ok"}, status=200)
+    else:
+        return render(request, "index.html")
 
 class spellCreateView(LoginRequiredMixin, CreateView):
     template_name = 'spell_form.html'
@@ -193,4 +314,4 @@ class LogoutInterfaceView(LogoutView):
 class RegisterView(CreateView):
     form_class = UserCreationForm
     template_name = 'register.html'
-    success_url = ''
+    success_url = '/'

@@ -9,6 +9,20 @@
         {% endif %}
     >
         <div class="card-body">
+            {% if user.is_authenticated %}
+                <div class="fave">
+                    <form class='like'>
+                        <input type="checkbox" name='stars' id='{{v_spell.id}}' class='star fm' onclick="toggle_favorite({{v_spell.id}});"
+                            {% for r in v_faves %}
+                                {% if r.spell == v_spell %}
+                                    checked value="True"
+                                {% endif %}
+                            {% endfor %}
+                        >
+                        <label for="{{v_spell.id}}"><i class='fa fa-star px-1'></i></label>
+                    </form>
+                </div>
+            {% endif %}
             <a href="{% url 'spell_detail' v_spell.id v_spell.name %}" style="text-decoration: none;">
                 <h4 class="card-title text-center"
                 {% if spell.school.name != "" %}
@@ -81,14 +95,13 @@
                         {% endfor %}
                     </div>
                 {% endif %}
-                {% if v_spell.user.id != 1 %}
+                {% if v_spell.creator.user.id != 1 %}
                     <hr>
                     <div class="text-end">
-                        <strong>Spell created by: </strong>{{v_spell.user.username}}
+                        <strong>Spell created by: </strong>{{v_spell.creator.user.username}}
                     </div>
                 {% endif %}
             </div>
         </div>
     </div>
-
 {% endblock %}
