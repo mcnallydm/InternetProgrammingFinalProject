@@ -36,6 +36,14 @@ def spell_detail(request, spell_id, spell_name):
         faves = Rating.objects.filter(player=curr_user).filter(favorite=True)
     except:
         pass
+    rate=-1
+    try:
+        curr_user = Profile.objects.get(user=request.user)
+        s = Spell.objects.get(id=spell_id)
+        rated = Rating.objects.filter(player=curr_user).get(spell=s)
+        rate=rated.score
+    except:
+        pass
     try:
         spell_to_view = Spell.objects.get(id=spell_id)
     except Spell.DoesNotExist:
@@ -43,6 +51,7 @@ def spell_detail(request, spell_id, spell_name):
     return render(request, "spell_detail.html", {
         "v_spell" : spell_to_view,
         "v_faves": faves,
+        "v_rate": rate,
         "v_classes" : CharacterClass.objects.all().order_by('name'),
         "v_schools" : School.objects.all(),
         "v_levels" : [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
@@ -275,23 +284,23 @@ def new_favorite(request):
 @login_required    
 def new_rating(request):
     if request.method == "POST":
-        favorite_str = request.POST["favorite"]
-        if favorite_str=="True":
-            favorite = True
-        else:
-            favorite=False
-        spell_id = request.POST["spell_id"]
+        rating = int(request.POST["rating"])
+        spell_id = int(request.POST["spell_id"])
         spell = Spell.objects.get(id=spell_id)
         faved_by = Profile.objects.get(user=request.user)
         try:
             temp = Rating.objects.filter(spell=spell).get(player=faved_by)
-            temp.favorite = favorite
+            temp.score = rating
         except:
-            temp = Rating(spell=spell, player=faved_by, favorite=favorite)
+            temp = Rating(spell=spell, player=faved_by, score=rating)
         temp.save()
         return JsonResponse({"msg": "ok"}, status=200)
     else:
         return render(request, "index.html")
+
+'''@login_required
+def recommendations(request):
+    '''
 
 class spellCreateView(LoginRequiredMixin, CreateView):
     template_name = 'spell_form.html'

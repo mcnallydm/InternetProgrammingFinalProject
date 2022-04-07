@@ -38,5 +38,6 @@ urlpatterns = [
     path('view_profile/', views.view_profile, name="view_profile"),
     path('favorites/', views.favorites, name="favorites"),
     path('favorites/new', views.new_favorite, name="new_favorite"),
-    path('edit_bio', views.edit_bio, name="edit_bio")
+    path('edit_bio', views.edit_bio, name="edit_bio"),
+    path('ratings/new', views.new_rating, name="new_rating"),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

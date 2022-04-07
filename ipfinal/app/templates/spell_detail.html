@@ -12,7 +12,7 @@
             {% if user.is_authenticated %}
                 <div class="fave">
                     <form class='like'>
-                        <input type="checkbox" name='stars' id='{{v_spell.id}}' class='star fm' onclick="toggle_favorite({{v_spell.id}});"
+                        <input type="checkbox" id='{{v_spell.id}}' class='star fm' onclick="toggle_favorite({{v_spell.id}});"
                             {% for r in v_faves %}
                                 {% if r.spell == v_spell %}
                                     checked value="True"
@@ -89,7 +89,7 @@
                     <div class="row">
                         <div class="col-xl-3 col-lg-4 col-md-5 col-sm-7">Classes that can access this spell:</div>
                         {% for cls in v_spell.char_class.all %}
-                            <div class="card col-lg-1 col-md-2 col-sm-3 col-4 text-center" style="color:black;">
+                            <div class="card col-lg-2 col-md-2 col-sm-3 col-4 text-center" style="color:black;">
                                 <strong>{{cls.name}}</strong>
                             </div>
                         {% endfor %}
@@ -103,5 +103,98 @@
                 {% endif %}
             </div>
         </div>
+        {% if user.is_authenticated %}
+            <hr>
+            <div class="starcontainer mb-3" style="font-size: 1.5rem;">
+                <div class="rating">
+                <form class='stars'>
+                    <button id="clear" class="btn text-white rat" value="{{v_spell.id}}" style="border-color: transparent;">&times;</button>
+                    <input type="radio" name='stars' value='{{v_spell.id}}' id='5stars' class='star rat' 
+                        {% if v_rate == 5 %}
+                            checked
+                        {% endif %}
+                    >
+                    <label for="5stars"><i class='fa fa-star px-1'></i></label>
+                    <input type="radio" name='stars' value='{{v_spell.id}}' id='4stars' class='star rat' 
+                        {% if v_rate == 4 %}
+                            checked
+                        {% endif %}
+                    >
+                    <label for="4stars"><i class='fa fa-star px-1'></i></label>
+                    <input type="radio" name='stars' value='{{v_spell.id}}' id='3stars' class='star rat' 
+                        {% if v_rate == 3 %}
+                            checked
+                        {% endif %}
+                    >
+                    <label for="3stars"><i class='fa fa-star px-1'></i></label>
+                    <input type="radio" name='stars' value='{{v_spell.id}}' id='2stars' class='star rat' 
+                        {% if v_rate == 2 %}
+                            checked
+                        {% endif %}
+                    >
+                    <label for="2stars"><i class='fa fa-star px-1'></i></label>
+                    <input type="radio" name='stars' value='{{v_spell.id}}' id='1star' class='star rat' 
+                        {% if v_rate == 1 %}
+                            checked
+                        {% endif %}
+                    >
+                    <label for="1star"><i class='fa fa-star px-1'></i></label>
+                    
+                </form>
+                
+                </div>
+            </div>
+        {% endif %}
     </div>
+    
+<script>
+
+    $(function() {
+        $('.rat').on('click', function(e) {
+            console.log("spell no "+this.value);
+            console.log(this.id)
+            if (this.id=="5stars") {
+                r = 5
+            }
+            else if (this.id=="4stars") {
+                r = 4
+            }
+            else if (this.id=="3stars") {
+                r = 3
+            }
+            else if (this.id=="2stars") {
+                r = 2
+            }
+            else if (this.id=="1star"){
+                r = 1
+            }
+            else {
+                r = 0
+            }
+            $.ajax({
+                url: "{% url 'new_rating' %}", //this is the submit URL
+                method: 'POST',
+                data: {
+                    csrfmiddlewaretoken: '{{csrf_token}}',
+                    rating: r,
+                    spell_id: Number($('#'+this.id).val())
+                },
+                success: function(response) {
+                    console.log(response["msg"]);
+                    if (response["msg"] == "ok") {
+                    } else {
+                        console.log("Failure");
+                    }
+                    setTimeout(function() {
+                    }, 3000);
+                },
+                error: function(response) {
+                    alert("error from my js");
+                }
+
+            });
+        });
+    });
+
+</script>
 {% endblock %}

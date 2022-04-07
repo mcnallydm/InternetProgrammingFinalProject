@@ -40,7 +40,7 @@
                 $('#'+s_id).val("True");
             }
             valu = $('#'+s_id).val();
-            console.log(s_id + " " + valu);
+            //console.log(s_id + " " + valu);
         }
     </script>
 <!-- navbar -->
@@ -151,7 +151,7 @@
     
     $(function() {
         $('.fm').on('click', function(e) {
-            console.log(this.id +" clicked");
+            //console.log("spell #"+this.id +" toggled");
             console.log($('#'+this.id).val())
             $.ajax({
                 url: "{% url 'new_favorite' %}", //this is the submit URL
@@ -165,7 +165,7 @@
                     console.log(response["msg"]);
                     if (response["msg"] == "ok") {
                         //$('#flashMessage').html("Thank you for registering...");
-                        console.log("Success");
+                        //console.log("Success");
                     } else {
                         console.log("Failure");
                     }

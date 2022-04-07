@@ -1,22 +1,6 @@
 {% extends "base.html" %}
 
 {% block content %}
-<!--div class="starcontainer" style="font-size: 1.5rem;">
-    <div class="rating">
-      <form class='stars'>
-        <input type="radio" name='stars' value='5' id='five' class='star' >
-        <label for="five"><i class='fa fa-star px-1'></i></label>
-        <input type="radio" name='stars' value='4' id='four' class='star'>
-        <label for="four"><i class='fa fa-star px-1'></i></label>
-        <input type="radio" name='stars' value='3' id='three' class='star'>
-        <label for="three"><i class='fa fa-star px-1'></i></label>
-        <input type="radio" name='stars' value='2' id='two' class='star'>
-        <label for="two"><i class='fa fa-star px-1'></i></label>
-        <input type="radio" name='stars' value='1' id='one' class='star' checked>
-        <label for="one"><i class='fa fa-star px-1'></i></label>
-      </form>
-    </div>
-  </div-->
   <script>
         function toggle_favorite(s_id) {
             valu = $('#'+s_id).val();
@@ -44,7 +28,7 @@
                         {% if user.is_authenticated %}
                         <div class="fave">
                             <form class='like'>
-                                <input type="checkbox" name='stars' id='{{spell.id}}' class='star fm' onclick="toggle_favorite({{spell.id}});"
+                                <input type="checkbox" id='{{spell.id}}' class='star fm' onclick="toggle_favorite({{spell.id}});"
                                     {% for r in v_faves %}
                                         {% if r.spell == spell %}
                                             checked value="True"

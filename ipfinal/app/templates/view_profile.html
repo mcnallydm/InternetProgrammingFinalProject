@@ -175,30 +175,32 @@
     </div>
 
     <script>
-        $('#bioForm').on('submit', function(e) {
-            console.log("submitted");
-            $.ajax({
-                url: "{% url 'edit_bio' %}", //this is the submit URL
-                method: 'POST',
-                data: {
-                    csrfmiddlewaretoken: '{{csrf_token}}',
-                    bio: $('#newbio').val(),
-                },
-                success: function(response) {
-                    console.log(response["msg"]);
-                    if (response["msg"] == "ok") {
-                        console.log("Success");
-                    } else {
-                        console.log("Failure");
+        $(function() {
+            $('#bioForm').on('submit', function(e) {
+                console.log("submitted");
+                $.ajax({
+                    url: "{% url 'edit_bio' %}", //this is the submit URL
+                    method: 'POST',
+                    data: {
+                        csrfmiddlewaretoken: '{{csrf_token}}',
+                        bio: $('#newbio').val(),
+                    },
+                    success: function(response) {
+                        console.log(response["msg"]);
+                        if (response["msg"] == "ok") {
+                            console.log("Success");
+                        } else {
+                            console.log("Failure");
+                        }
+                        setTimeout(function() {
+                            $("#biomodal").modal('hide');
+                        }, 3000);
+                    },
+                    error: function(response) {
+                        alert("error from my js");
                     }
-                    setTimeout(function() {
-                        $("#biomodal").modal('hide');
-                    }, 3000);
-                },
-                error: function(response) {
-                    alert("error from my js");
-                }
 
+                });
             });
         });
     </script>
