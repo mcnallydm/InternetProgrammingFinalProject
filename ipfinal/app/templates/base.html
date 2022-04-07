@@ -13,9 +13,16 @@
       content="I made my own spell catalog because I wanted to."
     />
     <link rel="apple-touch-icon" href="/static/img/icon1.png" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <link rel="stylesheet" href="{% static 'css/custom.css' %}">
+    <!--jQuery-->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js" ></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js" integrity="sha384-b/U6ypiBEHpOf/4+1nzFpr53nxSS+GLCkfwBdFNTxtclqqenISfwAzpKaMNFNmj4" crossorigin="anonymous"></script>
+
     <style>
         body {
             position: relative;
@@ -23,7 +30,19 @@
     </style>
 </head>
 <body id="home" class="dark-bg" data-spy="scroll" data-target=".navbar" data-offset="100">
-
+    <script>
+        function toggle_favorite(s_id) {
+            valu = $('#'+s_id).val();
+            if (valu=="True") {
+                $('#'+s_id).val("False");
+            }
+            else {
+                $('#'+s_id).val("True");
+            }
+            valu = $('#'+s_id).val();
+            //console.log(s_id + " " + valu);
+        }
+    </script>
 <!-- navbar -->
 <nav class="navbar navbar-expand-lg navbar-dark fixed-top backg-nav">
     <div class="container">
@@ -65,6 +84,8 @@
                 </div>
                 {% if user.is_authenticated %}
                     <a class="nav-item nav-link" href="{% url 'new_spell' %}" id="addlink">Create</a>
+                    <a class="nav-item nav-link" href="{% url 'favorites' %}" id="favlink">Favorites</a>
+                    <a class="nav-item nav-link" href="{% url 'custom_spells' %}" id="mylink">Custom Spells</a>
                 {% endif %}
             </div>
         </div>
@@ -76,7 +97,7 @@
             </div>
         </form>
         {% if user.is_authenticated %}
-            <a class="nav-item nav-link text-white mx-2" href="{% url 'custom_spells' %}" id="profilelink">{{ user.username }}</a>
+            <a class="nav-item nav-link text-white mx-2" href="{% url 'view_profile' %}" id="profilelink">{{ user.username }}</a>
             <a class='btn btn-outline-light' href="{% url 'logout' %}">Logout</a>
         {% else %}
             <div class="text-end">
@@ -123,9 +144,45 @@
 <!-- /footer -->
 
 <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<!--script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script-->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js" integrity="sha384-b/U6ypiBEHpOf/4+1nzFpr53nxSS+GLCkfwBdFNTxtclqqenISfwAzpKaMNFNmj4" crossorigin="anonymous"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js" integrity="sha384-h0AbiXch4ZDo7tp9hKZ4TsHbi047NrKGLO3SEJAg45jXxnGIfYzk4Si90RDIqNm1" crossorigin="anonymous"></script>
+<script>
+    
+    $(function() {
+        $('.fm').on('click', function(e) {
+            //console.log("spell #"+this.id +" toggled");
+            console.log($('#'+this.id).val())
+            $.ajax({
+                url: "{% url 'new_favorite' %}", //this is the submit URL
+                method: 'POST',
+                data: {
+                    csrfmiddlewaretoken: '{{csrf_token}}',
+                    favorite: $('#'+this.id).val(),
+                    spell_id: this.id
+                },
+                success: function(response) {
+                    console.log(response["msg"]);
+                    if (response["msg"] == "ok") {
+                        //$('#flashMessage').html("Thank you for registering...");
+                        //console.log("Success");
+                    } else {
+                        console.log("Failure");
+                    }
+                    //$("#flashMessage").slideDown(1000).delay(1000).slideUp();
+                    setTimeout(function() {
+                        //$("#register").modal('hide');
+                    }, 3000);
+                },
+                error: function(response) {
+                    alert("error from my js");
+                }
+
+            });
+        });
+    });
+
+</script>
 </body>
 
 </html>

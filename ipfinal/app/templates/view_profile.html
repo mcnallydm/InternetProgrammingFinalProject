@@ -1,0 +1,207 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <div class="row my-3 p-3">
+        {% if v_prof.avatar != 'default.png' %}
+            <img src="/media/{{v_prof.avatar}}" class="text-center rounded-circle" style="width:20rem;">
+        {% endif %}
+        <h1>{{v_prof.user.username}}</h1>
+        <hr>
+        <h3>Bio
+            <button id="editbio" class="btn btn-outline-secondary" style="border-color: transparent;" data-toggle="modal" data-target="#biomodal">&#9998</button>
+        </h3>
+        <div class="form-control-plaintext">{{v_prof.bio}}</div>
+        <!--{% if v_myfaves %}
+            <hr>
+            <h3>Favorites</h3>
+            <div id='f'class="row">
+                {% for spell in v_myfaves %}
+                    <div class="col-md-6 col-lg-3">
+                        <div class="card mb-3"
+                            {% if spell.school.name != "" %}
+                                style="border-color: transparent; background-image: url( '/static/img/{{spell.school.name}}.jpg' ); color: white;"
+                            {% else %}
+                                style="color: black;"
+                            {% endif %}
+                        >
+                            <div class="card-body">
+                                <div class="fave">
+                                    <form class='like'>
+                                        <input type="checkbox" name='stars' id='{{spell.id}}' class='star fm' onclick="toggle_favorite({{spell.id}});"
+                                            {% for r in v_faves %}
+                                                {% if r.spell == spell %}
+                                                    checked value="True"
+                                                {% endif %}
+                                            {% endfor %}
+                                        >
+                                    <label for="{{spell.id}}"><i class='fa fa-star px-1'></i></label>
+                                    </form>
+                                </div>
+                                <a href="{% url 'spell_detail' spell.id spell.name %}" style="text-decoration: none;">
+                                    <h4 class="card-title text-center"
+                                    {% if spell.school.name != "" %}
+                                        style="color: white;"
+                                    {% else %}
+                                    style="color: black;"
+                                    {% endif %}
+                                    >{{spell.name}}</h4>
+                                </a>
+                                <div class="text-center">{{ spell.school.name }}</div>
+                                <hr>
+                                <div class="card-text">
+                                    <div class="row">
+                                        <div class="col-5">
+                                            <strong>Level: </strong>
+                                            {% if spell.level == 0 %}
+                                                Cantrip
+                                            {% else %}
+                                                {{spell.level}}
+                                            {% endif %}
+                                        </div>
+                                        <div class="col-7"><strong>Time: </strong>{{spell.casting_time}} 
+                                            {% if spell.ritual %}
+                                                (R)
+                                            {% endif %}
+                                        </div>
+                                        <div class="col-12"><strong>Duration: </strong>{{spell.duration}} 
+                                            {% if spell.concentration %}
+                                                (C)
+                                            {% endif %}
+                                        </div>
+                                        <div class="col-6"><strong>Range: </strong>{{spell.range}}</div>
+                                        <div class="col-6"><strong>Area: </strong>{{spell.area}}</div>
+                                        <div class="col-12"><strong>Shape: </strong>{{spell.area_shape}}</div>
+                                        <div class="col-6"><strong>Attack: </strong>{{spell.attack}}</div>
+                                        <div class="col-6"><strong>Save: </strong>{{spell.saving_throw}}</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}-->
+        {% if v_prof.created_spells.all %}
+            <hr>
+            <h3>Created Spells</h3>
+            <div id="c" class="row">
+                {% for spell in v_cspells %}
+                    <div class="col-md-6 col-lg-3">
+                        <div class="card mb-3" 
+                            {% if spell.school.name != "" %}
+                                style="border-color: transparent; background-image: url( '/static/img/{{spell.school.name}}.jpg' ); color: white;"
+                            {% else %}
+                                style="color: black;"
+                            {% endif %}
+                        >
+                            <div class="card-body">
+                                <div class="fave">
+                                    <form class='like'>
+                                        <input type="checkbox" name='stars' id='{{spell.id}}' class='star fm' onclick="toggle_favorite({{spell.id}});"
+                                            {% for r in v_faves %}
+                                                {% if r.spell == spell %}
+                                                    checked value="True"
+                                                {% endif %}
+                                            {% endfor %}
+                                        >
+                                    <label for="{{spell.id}}"><i class='fa fa-star px-1'></i></label>
+                                    </form>
+                                </div>
+                                <a href="{% url 'spell_detail' spell.id spell.name %}" style="text-decoration: none;">
+                                    <h4 class="card-title text-center"
+                                    {% if spell.school.name != "" %}
+                                        style="color: white;"
+                                    {% else %}
+                                    style="color: black;"
+                                    {% endif %}
+                                    >{{spell.name}}</h4>
+                                </a>
+                                <div class="text-center">{{ spell.school.name }}</div>
+                                <hr>
+                                <div class="card-text">
+                                    <div class="row">
+                                        <div class="col-5">
+                                            <strong>Level: </strong>
+                                            {% if spell.level == 0 %}
+                                                Cantrip
+                                            {% else %}
+                                                {{spell.level}}
+                                            {% endif %}
+                                        </div>
+                                        <div class="col-7"><strong>Time: </strong>{{spell.casting_time}} 
+                                            {% if spell.ritual %}
+                                                (R)
+                                            {% endif %}
+                                        </div>
+                                        <div class="col-12"><strong>Duration: </strong>{{spell.duration}} 
+                                            {% if spell.concentration %}
+                                                (C)
+                                            {% endif %}
+                                        </div>
+                                        <div class="col-6"><strong>Range: </strong>{{spell.range}}</div>
+                                        <div class="col-6"><strong>Area: </strong>{{spell.area}}</div>
+                                        <div class="col-12"><strong>Shape: </strong>{{spell.area_shape}}</div>
+                                        <div class="col-6"><strong>Attack: </strong>{{spell.attack}}</div>
+                                        <div class="col-6"><strong>Save: </strong>{{spell.saving_throw}}</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    </div>
+
+    <div class="modal fade" id="biomodal" tabindex="-1" role="dialog" aria-labelledby="register form" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header bg-info text-white">
+                    <h5 class="modal-title" id="exampleModalLabel">Edit Bio</h5>
+                    <button type="button" class="close btn" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <!-- registration form -->
+                    <form id="bioForm">
+                        <textarea id="newbio" class="form-control" value="{{v_prof.bio}}" style="height: 30rem;">{{v_prof.bio}}</textarea>
+                        <button type="submit" class="btn btn-primary btn-lg mt-3">Done</button>
+                    </form>
+                    <!-- /registration form -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        $(function() {
+            $('#bioForm').on('submit', function(e) {
+                console.log("submitted");
+                $.ajax({
+                    url: "{% url 'edit_bio' %}", //this is the submit URL
+                    method: 'POST',
+                    data: {
+                        csrfmiddlewaretoken: '{{csrf_token}}',
+                        bio: $('#newbio').val(),
+                    },
+                    success: function(response) {
+                        console.log(response["msg"]);
+                        if (response["msg"] == "ok") {
+                            console.log("Success");
+                        } else {
+                            console.log("Failure");
+                        }
+                        setTimeout(function() {
+                            $("#biomodal").modal('hide');
+                        }, 3000);
+                    },
+                    error: function(response) {
+                        alert("error from my js");
+                    }
+
+                });
+            });
+        });
+    </script>
+{% endblock %}

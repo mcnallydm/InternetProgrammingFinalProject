@@ -1,8 +1,9 @@
+from operator import truediv
 from time import time
 from xml.parsers.expat import model
 from django.db import models
 from django.forms import IntegerField
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, AbstractUser
 
 # Create your models here.
 class School(models.Model):
@@ -31,6 +32,13 @@ class CharacterClass(models.Model):
     name = models.CharField(max_length=70, null=True)
     def __str__(self):
         return f"{self.name}"
+
+class Profile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="profile")
+    bio = models.TextField(max_length=1000, blank=True)
+    avatar = models.ImageField(default='default.png', upload_to='profile_images')
+    def __str__(self):
+        return f"{self.user.username}"
 
 class Spell(models.Model):
     name = models.CharField(max_length=40)
@@ -74,17 +82,15 @@ class Spell(models.Model):
     description = models.TextField(max_length=4000, default="No description provided.")
     upcasting = models.TextField(max_length=1000, default="No additional effects when upcast.")
     char_class = models.ManyToManyField(CharacterClass, related_name="spell", blank=True)
-    RATING_OPTIONS = [
-        ("No Rating", "No Rating"), 
-        ("1/5", "1/5"), 
-        ("2/5", "2/5"), 
-        ("3/5", "3/5"), 
-        ("4/5", "4/5"), 
-        ("5/5", "5/5")
-        ]
-    rating = models.IntegerField(choices=RATING_OPTIONS, null = True, blank=True)
-    favorite = models.BooleanField(default=False)
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="diy_spells")
+    creator = models.ForeignKey(Profile, related_name="created_spells", blank=True, on_delete=models.CASCADE)
 
     def __str__(self):
         return f"{self.name}"
+
+class Rating(models.Model):
+    spell = models.ForeignKey(Spell, related_name="rating", blank=True, on_delete=models.CASCADE)
+    player = models.ForeignKey(Profile, related_name="rating", blank=True, on_delete=models.CASCADE)
+    favorite = models.BooleanField(default=False)
+    score = models.IntegerField(blank=True, null=True)
+    def __str__(self):
+        return f"{self.player.user.username} / {self.spell}"

@@ -23,3 +23,54 @@
 ul.errorlist {
     display: none
 }
+
+.starcontainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+  
+.stars {
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: space-around;
+}
+
+.rating input{
+    display: none;
+}
+
+.stars i {
+    transition: all .3s;
+}
+
+.stars i:hover {
+    transform: scale(1.1) rotate(5deg);
+    cursor: pointer;
+}
+
+.stars :checked ~ label {
+    color: gold;
+}
+
+.fave input{
+    display: none;
+}
+
+.like {
+    display: flex;
+    flex-direction: row;
+}
+
+.like i {
+    transition: all .3s;
+}
+
+.like i:hover {
+    transform: scale(1.1) rotate(5deg);
+    cursor: pointer;
+}
+
+.like :checked ~ label {
+    color: gold;
+}

@@ -26,3 +26,11 @@ class CharClassAdmin(admin.ModelAdmin):
 @admin.register(School)
 class SchoolAdmin(admin.ModelAdmin):
     pass
+
+@admin.register(Profile)
+class ProfileAdmin(admin.ModelAdmin):
+    pass
+
+@admin.register(Rating)
+class RatingAdmin(admin.ModelAdmin):
+    pass

@@ -15,6 +15,8 @@ Including another URLconf
 """
 from app import views
 from django.contrib import admin
+from django.conf import settings
+from django.conf.urls.static import static
 from django.urls import path
 
 urlpatterns = [
@@ -27,10 +29,15 @@ urlpatterns = [
     path('schools/', views.schools, name="schools"),
     path('level_spells/<int:level_num>/', views.level_spells, name="level_spells"),
     path('levels/', views.levels, name="levels"),
-     path("login", views.LoginInterfaceView.as_view(), name="login"),
+    path("login", views.LoginInterfaceView.as_view(), name="login"),
     path("logout", views.LogoutInterfaceView.as_view(), name="logout"),
     path("register", views.RegisterView.as_view(), name="register"),
     path('custom_spells/', views.custom_spells, name="custom_spells"),
     path("search", views.search, name="search"),
     path ("custom_spells/new", views.spellCreateView.as_view(), name="new_spell"),
-]
+    path('view_profile/', views.view_profile, name="view_profile"),
+    path('favorites/', views.favorites, name="favorites"),
+    path('favorites/new', views.new_favorite, name="new_favorite"),
+    path('edit_bio', views.edit_bio, name="edit_bio"),
+    path('ratings/new', views.new_rating, name="new_rating"),
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
