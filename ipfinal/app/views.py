@@ -298,6 +298,15 @@ def new_rating(request):
     else:
         return render(request, "index.html")
 
+def delete_spell(request):
+    if request.method == "POST":
+        spell_id = int(request.POST["spell_id"])
+        temp = Spell.objects.get(id=spell_id)
+        temp.delete()
+        return JsonResponse({"msg": "ok"}, status=200)
+    else:
+        return render(request, "index.html")
+
 '''@login_required
 def recommendations(request):
     '''

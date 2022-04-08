@@ -113,6 +113,13 @@
 <div class="jumbotron jumbotron-fluid bg-info text-white">
     <div class="container text-sm-center pt-5">
         <h1 class="display-2 py-5">Spells</h1>
+        {% if user.is_authenticated %}
+        {% else %}
+            <p class="display-6">Looking to make your own spells?</p>
+            <div class="text-white pb-3">
+                <a class='btn btn-light' href="{% url 'register' %}" style="color: #3d304f;">Register</a> or <a class='btn btn-light' href="{% url 'login' %}" style="color: #3d304f;">Login</a>
+            </div>
+        {% endif %}
         </div>
     </div>
 </div>

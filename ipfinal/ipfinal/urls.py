@@ -40,4 +40,5 @@ urlpatterns = [
     path('favorites/new', views.new_favorite, name="new_favorite"),
     path('edit_bio', views.edit_bio, name="edit_bio"),
     path('ratings/new', views.new_rating, name="new_rating"),
+    path('delete_spell', views.delete_spell, name="delete_spell"),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
