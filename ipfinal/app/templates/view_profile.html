@@ -192,6 +192,8 @@
                 </div>
                 <div class="modal-body">
                     <form id="deleteForm">
+                        <h5>If you're certain, type the name of the spell below to delete it.</h5>
+                        <input type=""text id="delete_me" class="form-control">
                         <button type="submit" class="btn btn-danger btn-lg mt-3">DELETE</button>
                     </form>
                 </div>
@@ -232,13 +234,13 @@
         $(function() {
             $('#deleteForm').on('submit', function(e) {
                 console.log(this.id);
-                console.log("DELETED");
+                console.log("DELETING");
                 $.ajax({
                     url: "{% url 'delete_spell' %}", //this is the submit URL
                     method: 'POST',
                     data: {
                         csrfmiddlewaretoken: '{{csrf_token}}',
-                        spell_id: $('#delete'+this.id),
+                        spell_name: $('#delete_me').val(),
                     },
                     success: function(response) {
                         console.log(response["msg"]);

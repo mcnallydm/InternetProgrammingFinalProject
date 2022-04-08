@@ -300,8 +300,9 @@ def new_rating(request):
 
 def delete_spell(request):
     if request.method == "POST":
-        spell_id = int(request.POST["spell_id"])
-        temp = Spell.objects.get(id=spell_id)
+        spell_name = request.POST["spell_name"]
+        maker = Profile.objects.get(user=request.user)
+        temp = Spell.objects.filter(name=spell_name).get(creator=maker)
         temp.delete()
         return JsonResponse({"msg": "ok"}, status=200)
     else:
