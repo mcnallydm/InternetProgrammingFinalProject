@@ -84,6 +84,9 @@
                 <div class="row pb-3">
                     <div class="col-12"><strong>If cast using higher level spell slots: </strong>{{v_spell.upcasting}}</div>
                 </div>
+                {% if v_spell.materials != "None" %}
+                    Materials: <em>{{v_spell.materials}}</em>
+                {% endif %}
                 <hr>
                 {% if v_spell.char_class.all %}
                     <div class="row">
