@@ -74,3 +74,13 @@ ul.errorlist {
 .like :checked ~ label {
     color: gold;
 }
+
+.btn-spell {
+    background-color: #3d304f;
+    color: white;
+}
+
+.btn-spell:hover {
+    background-color: white;
+    color: #3d304f;
+}
