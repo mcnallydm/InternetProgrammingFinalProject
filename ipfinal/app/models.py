@@ -76,7 +76,7 @@ class Spell(models.Model):
     duration = models.CharField(max_length=20, default="None")
     concentration = models.BooleanField()
     components = models.ManyToManyField(Component, related_name="spell", blank=True)
-    materials = models.CharField(max_length=100, default="None")
+    materials = models.CharField(max_length=300, default="None")
     damage_type = models.ManyToManyField(DamageType, related_name="spell", blank=True)
     effects = models.ManyToManyField(Effect, blank=True)
     description = models.TextField(max_length=4000, default="No description provided.")
