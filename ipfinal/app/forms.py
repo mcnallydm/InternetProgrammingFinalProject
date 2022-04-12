@@ -22,8 +22,8 @@ class SpellForm(forms.ModelForm):
             'materials',
             'damage_type',
             'description',
-            'effects',
             'upcasting',
+            'effects',
             'char_class',
         )
 
