@@ -37,7 +37,7 @@ class SpellForm(forms.ModelForm):
             'attack': forms.RadioSelect(),
             'saving_throw': forms.RadioSelect(),
             'components': forms.CheckboxSelectMultiple(),
-            'materials': forms.TextInput(attrs={"class": "col-auto form-control"}),
+            'materials': forms.Textarea(attrs={"class": "col-auto form-control"}),
             'damage_type': forms.CheckboxSelectMultiple(),
             'effects': forms.CheckboxSelectMultiple(),
             'description': forms.Textarea(attrs={"class": "form-control"}),
