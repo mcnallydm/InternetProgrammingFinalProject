@@ -14,7 +14,7 @@ from django.contrib.auth.decorators import login_required
 def index(request):
     og = Profile.objects.get(id=1)
     spells = Spell.objects.filter(creator=og)
-    results = spells.order_by('name')
+    results = spells.order_by('level', 'name')
     faves=[]
     try:
         curr_user = Profile.objects.get(user=request.user)
@@ -68,8 +68,9 @@ def class_spells(request, class_name):
         class_to_view = CharacterClass.objects.get(name=class_name)
     except CharacterClass.DoesNotExist:
         raise Http404('Class not found.')
-    #results = Spell.objects.filter(char_class__contains = class_to_view)
-    results = class_to_view.spell.all
+    og = Profile.objects.get(id=1)
+    results = (Spell.objects.filter(char_class__name = class_to_view.name).filter(creator=og)|Spell.objects.filter(char_class__name = class_to_view.name).filter(creator=curr_user)).order_by('level', 'name')
+    #results = class_to_view.spell.all
     return render(request, "index.html", {
         "v_spells" : results,
         "v_faves": faves,
@@ -96,7 +97,8 @@ def school_spells(request, school_name):
         school_to_view = School.objects.get(name=school_name)
     except CharacterClass.DoesNotExist:
         raise Http404('School not found.')
-    results = school_to_view.spell.all
+    #results = school_to_view.spell.all
+    results = Spell.objects.filter(school=school_to_view).order_by('level', 'name')
     return render(request, "index.html", {
         "v_spells" : results,
         "v_faves": faves,
@@ -120,7 +122,7 @@ def level_spells(request, level_num):
     except:
         pass
     try:
-        results = Spell.objects.filter(level=level_num)
+        results = Spell.objects.filter(level=level_num).order_by('name')
     except Spell.DoesNotExist:
         raise Http404('Spell Level not found.')
     return render(request, "index.html", {
@@ -151,7 +153,7 @@ def custom_spells(request):
         spells_to_view = Spell.objects.filter(creator=curr_user)
     except Spell.DoesNotExist:
         raise Http404('User not found.')
-    results = spells_to_view
+    results = spells_to_view.order_by('school', 'level', 'name')
     return render(request, "index.html", {
         "v_spells" : results,
         "v_faves": faves,
@@ -170,10 +172,11 @@ def favorites(request):
         pass
     try:
         curr_user = Profile.objects.get(user=request.user)
-        faves = Rating.objects.filter(player=curr_user).filter(favorite=True)
+        '''faves = Rating.objects.filter(player=curr_user).filter(favorite=True)
         spells_to_view = []
         for rat in faves:
-            spells_to_view.append(rat.spell)
+            spells_to_view.append(rat.spell)'''
+        spells_to_view = Spell.objects.filter(rating__favorite=True, rating__player=curr_user).order_by('level', 'name')
     except Spell.DoesNotExist:
         raise Http404('User not found.')
     results = spells_to_view
@@ -198,7 +201,8 @@ def view_profile(request):
     my_faves = []
     for rat in faves:
         my_faves.append(rat.spell)
-    my_spells = prof.created_spells.all
+    my_spells = Spell.objects.filter(creator=prof).order_by('school', 'level', 'name')
+    #my_spells = prof.created_spells.all
     return render(request, "view_profile.html", {
         "v_prof": prof,
         "v_faves": faves,
@@ -253,7 +257,7 @@ def search(request):
                 Spell.objects.filter(description__contains = keyword) | \
                 Spell.objects.filter(upcasting__contains = keyword).filter(creator=Profile.objects.get(id=1))
     return render(request, "index.html", {
-        "v_spells" : results,
+        "v_spells" : results.order_by('level', 'name'),
         "v_faves": faves,
         "v_classes" : CharacterClass.objects.all().order_by('name'),
         "v_schools" : School.objects.all(),

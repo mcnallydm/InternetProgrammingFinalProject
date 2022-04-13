@@ -29,7 +29,7 @@ class SpellForm(forms.ModelForm):
 
         widgets = {
             'name': forms.TextInput(attrs={"class": "col-auto form-control"}),
-            'level': forms.TextInput(attrs={"class": "col"}),
+            'level': forms.NumberInput(attrs={"class": "col"}),
             'school': forms.RadioSelect(),
             'range': forms.TextInput(attrs={"class": "col"}),
             'area': forms.TextInput(attrs={"class": "col"}),
@@ -58,9 +58,17 @@ class SpellForm(forms.ModelForm):
         if not sch:
             raise forms.ValidationError("You must select a school.")
         return sch
+    
+    def clean_level(self):
+        lv = self.cleaned_data['level']
+        if lv is None:
+            raise forms.ValidationError("You must provide a level.")
+        return lv
 
     def clean_name(self):
         name = self.cleaned_data['name']
+        if not name:
+            raise forms.ValidationError("You must provide a name.")
         if not name[0].isupper():
             raise forms.ValidationError("First letter should be capital.")
         return name

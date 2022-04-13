@@ -52,7 +52,7 @@
                         <hr>
                         <div class="card-text">
                             <div class="row">
-                                <div class="col-5">
+                                <div class="col-12 text-center">
                                     <strong>Level: </strong>
                                     {% if spell.level == 0 %}
                                         Cantrip
@@ -60,7 +60,7 @@
                                         {{spell.level}}
                                     {% endif %}
                                 </div>
-                                <div class="col-7"><strong>Time: </strong>{{spell.casting_time}} 
+                                <div class="col-12"><strong>Time: </strong>{{spell.casting_time}} 
                                     {% if spell.ritual %}
                                         (R)
                                     {% endif %}
@@ -72,9 +72,9 @@
                                 </div>
                                 <div class="col-6"><strong>Range: </strong>{{spell.range}}</div>
                                 <div class="col-6"><strong>Area: </strong>{{spell.area}}</div>
-                                <div class="col-12"><strong>Shape: </strong>{{spell.area_shape}}</div>
+                                <div class="col-6"><strong>Shape: </strong>{{spell.area_shape}}</div>
                                 <div class="col-6"><strong>Attack: </strong>{{spell.attack}}</div>
-                                <div class="col-6"><strong>Save: </strong>{{spell.saving_throw}}</div>
+                                <div class="col-12"><strong>Save: </strong>{{spell.saving_throw}}</div>
                             </div>
                         </div>
                     </div>
