@@ -69,7 +69,10 @@ def class_spells(request, class_name):
     except CharacterClass.DoesNotExist:
         raise Http404('Class not found.')
     og = Profile.objects.get(id=1)
-    results = (Spell.objects.filter(char_class__name = class_to_view.name).filter(creator=og)|Spell.objects.filter(char_class__name = class_to_view.name).filter(creator=curr_user)).order_by('level', 'name')
+    try:
+        results = (Spell.objects.filter(char_class__name = class_to_view.name).filter(creator=og)|Spell.objects.filter(char_class__name = class_to_view.name).filter(creator=curr_user)).order_by('level', 'name')
+    except:
+        results = Spell.objects.filter(char_class__name = class_to_view.name).filter(creator=og).order_by('level', 'name')
     #results = class_to_view.spell.all
     return render(request, "index.html", {
         "v_spells" : results,
@@ -98,7 +101,11 @@ def school_spells(request, school_name):
     except CharacterClass.DoesNotExist:
         raise Http404('School not found.')
     #results = school_to_view.spell.all
-    results = Spell.objects.filter(school=school_to_view).order_by('level', 'name')
+    og = Profile.objects.get(id=1)
+    try:
+        results = (Spell.objects.filter(school=school_to_view).filter(creator=og)|Spell.objects.filter(school=school_to_view).filter(creator=curr_user)).order_by('level', 'name')
+    except:
+        results = Spell.objects.filter(school=school_to_view).filter(creator=og).order_by('level', 'name')
     return render(request, "index.html", {
         "v_spells" : results,
         "v_faves": faves,
@@ -125,6 +132,11 @@ def level_spells(request, level_num):
         results = Spell.objects.filter(level=level_num).order_by('name')
     except Spell.DoesNotExist:
         raise Http404('Spell Level not found.')
+    og = Profile.objects.get(id=1)
+    try:
+        results = (Spell.objects.filter(level=level_num).filter(creator=og)|Spell.objects.filter(level=level_num).filter(creator=curr_user)).order_by('name')
+    except:
+        results = Spell.objects.filter(level=level_num).filter(creator=og).order_by('name')
     return render(request, "index.html", {
         "v_spells" : results,
         "v_faves": faves,
